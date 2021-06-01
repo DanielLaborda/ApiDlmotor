@@ -3,12 +3,12 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
-from flask_cors import CORS
+# from flask_cors import CORS
 import base64
 
 app = Flask(__name__)
 
-cors = CORS(app, allow_headers='Content-Type', CORS_SEND_WILDCARD=True)
+# cors = CORS(app, allow_headers='Content-Type', CORS_SEND_WILDCARD=True)
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
