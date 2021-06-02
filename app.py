@@ -11,8 +11,8 @@ app = Flask(__name__)
 cors = CORS(app, allow_headers='Content-Type', CORS_SEND_WILDCARD=True)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
