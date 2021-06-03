@@ -12,8 +12,8 @@ cors = CORS(app, allow_headers='Content-Type', CORS_SEND_WILDCARD=True)
 
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -80,6 +80,18 @@ class Imagesbannerracing(db.Model):
             self.ImagesBannerRacing_image = ImagesBannerRacing_image
             self.ImagesBannerRacing_racingteam = ImagesBannerRacing_racingteam
 
+# MODEL Categoriesracing
+class Categoriesracing(db.Model):
+    categoriesracing_id = db.Column(db.Integer, primary_key=True)
+    categoriesracing_name = db.Column(db.String(50))
+    categoriesracing_image = db.Column(db.BLOB)
+    categoriesracing_video = db.Column(db.String(100))
+
+    def __init__(self,  categoriesracing_id, categoriesracing_name, categoriesracing_image, categoriesracing_video):
+            self.categoriesracing_id = categoriesracing_id
+            self.categoriesracing_name = categoriesracing_name
+            self.categoriesracing_image = categoriesracing_image
+            self.categoriesracing_video = categoriesracing_video
 
 # # MODEL userType
 # class UsersType(db.Model):
@@ -128,7 +140,7 @@ companys_schema = CompanySchema(many=True)
 ## ROUTES
 ## company
 @app.route('/company/<_id>', methods=['GET'])
-def get_companies(_id):
+def get_company(_id):
     company = Company.query.get(_id)
     
     result = {
@@ -175,6 +187,7 @@ def get_racingTeam(_id):
         "racingTeam_slogan": racingTeam.racingteam_slogan,
         "racingTeam_description": racingTeam.racingteam_description,
         "racingTeam_description2": racingTeam.racingteam_description2,
+        "racingTeam_video": racingTeam.racingteam_video,
         "racingTeam_imagesBanner":  resultImages  
     }
     
@@ -182,6 +195,26 @@ def get_racingTeam(_id):
     response = jsonify(result)
     return response
 
+## categoriesRacing
+@app.route('/categoriesRacing', methods=['GET'])
+def get_categoriesracing():
+    categoriesracing = Categoriesracing.query.all()
+    
+    result = []
+    for category in categoriesracing:
+        result.append({
+            "categoriesracing_name": category.categoriesracing_name,
+            "categoriesracing_image": base64.b64encode(category.categoriesracing_image).decode("utf-8"),
+            "categoriesracing_video": category.categoriesracing_video  
+        })
+
+    db.session.commit()
+    response = jsonify(result)
+
+    return response
+
+
+    
 ## Users types
 # @app.route('/user_types', methods=['POST'])
 # def create_userTypes():
