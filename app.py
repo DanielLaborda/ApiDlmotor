@@ -6,14 +6,17 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 import base64
 
+from http.server import HTTPServer, SimpleHTTPRequestHandler, test
+import sys
+
 app = Flask(__name__)
 
-cors = CORS(app, allow_headers='Content-Type', CORS_SEND_WILDCARD=True)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -93,27 +96,29 @@ class Categoriesracing(db.Model):
             self.categoriesracing_image = categoriesracing_image
             self.categoriesracing_video = categoriesracing_video
 
-# # MODEL userType
-# class UsersType(db.Model):
-#     usertype_id = db.Column(db.Integer, primary_key=True)
-#     usertype_name = db.Column(db.String(45))
-#     def __init__(self, usertype_name):
-#         self.usertype_name = usertype_name
+# MODEL userType
+class UsersType(db.Model):
+    userstype_id = db.Column(db.Integer, primary_key=True)
+    userstype_name = db.Column(db.String(45))
+    def __init__(self, userstype_name):
+        self.userstype_name = userstype_name
         
 
-# # MODEL users
-# class Users(db.Model):
-#     user_id = db.Column(db.Integer, primary_key=True)
-#     user_name = db.Column(db.String(50))
-#     user_password = db.Column(db.String(50))
-#     user_email = db.Column(db.String(50))
-#     user_type_id = db.Column(db.Integer, db.ForeignKey('users_type.usertype_id'))
+# MODEL users
+class Users(db.Model):
+    users_id = db.Column(db.Integer, primary_key=True)
+    users_name = db.Column(db.String(50))
+    users_surname = db.Column(db.String(50))
+    users_password = db.Column(db.String(25))
+    users_email = db.Column(db.String(50))
+    users_type = db.Column(db.Integer)
 
-#     def __init__(self, user_name, user_password, user_email, user_type_id):
-#         self.user_name = user_name
-#         self.user_password = user_password
-#         self.user_email = user_email
-#         self.user_type_id = user_type_id
+    def __init__(self, users_name, users_surname, users_password, users_email, users_type):
+        self.users_name = users_name
+        self.users_surname = users_surname
+        self.users_password = users_password
+        self.users_email = users_email
+        self.users_type = users_type
 
 
 db.create_all()
@@ -124,17 +129,17 @@ class CompanySchema(ma.Schema):
 company_schema = CompanySchema()
 companys_schema = CompanySchema(many=True)
 
-# class UserTypesSchema(ma.Schema):
-#     class Meta:
-#         fields = ('usertype_id', 'usertype_name')
-# userType_schema = UserTypesSchema()
-# userTypes_schema = UserTypesSchema(many=True)
+class UserTypesSchema(ma.Schema):
+    class Meta:
+        fields = ('userstype_id', 'userstype_name')
+userType_schema = UserTypesSchema()
+userTypes_schema = UserTypesSchema(many=True)
 
-# class UsersSchema(ma.Schema):
-#     class Meta:
-#         fields = ('user_id', 'user_name', 'user_password', 'user_email', 'user_type_id')
-# user_schema = UsersSchema()
-# users_schema = UsersSchema(many=True)
+class UsersSchema(ma.Schema):
+    class Meta:
+        fields = ('users_id', 'users_name', 'users_surname', 'users_password', 'users_email', 'users_type_id')
+user_schema = UsersSchema()
+users_schema = UsersSchema(many=True)
 
 
 ## ROUTES
@@ -214,7 +219,110 @@ def get_categoriesracing():
     return response
 
 
+## user_types
+@app.route('/user_types/<_id>', methods=['GET'])
+def get_userTypes_id(_id):
+    userTypes = UsersType.query.get(_id)
+    return userType_schema.jsonify(userTypes)
+
+
+## USER- INFO by id
+@app.route('/userInfo/<_id>', methods=['GET'])
+def get_userinfoByid(_id):    
+    user_email = _id
+    user = Users.query.get(_id)
+
+    typeU = UsersType.query.get(user.users_type)
+    result = {
+        "user_id": user.users_id,
+        "user_name": user.users_name,
+        "user_surname": user.users_surname,
+        "user_password": user.users_password,
+        "user_email": user.users_email,
+        "userType":[
+            {
+                "usertype_id": typeU.userstype_id, 
+                "usertype_name": typeU.userstype_name
+            }
+        ],
+        "response": "Accepted"        
+    }
+
+    db.session.commit()
+    response = jsonify(result)
+    return response
+
+## USER- INFO login
+@app.route('/userInfo/<email>/<password>', methods=['GET'])
+def get_userinfo(email, password):    
+    user_email = email
+    user_password = password
+    user = Users.query.filter(Users.users_email == user_email).one()
+
+    if(user):
+        if (user_password == user.users_password):
+            typeU = UsersType.query.get(user.users_type)
+            result = {
+                "user_id": user.users_id,
+                "user_name": user.users_name,
+                "user_surname": user.users_surname,
+                "user_password": user.users_password,
+                "user_email": user.users_email,
+                "userType":[
+                    {
+                        "usertype_id": typeU.userstype_id, 
+                        "usertype_name": typeU.userstype_name
+                    }
+                ],
+                "response": "Accepted"        
+            }
+        else:
+            result = {
+                "response": "Declined"
+            }
+    else:
+        result = {
+            "response": "Declined"
+        }
+
+    db.session.commit()
+    response = jsonify(result)
+    return response
+
+## CREATE USER
+@app.route('/users', methods=['POST'])
+def create_user():
+    users_name = request.json['users_name']
+    users_surname = request.json['users_surname']
+    users_password = request.json['users_password']
+    users_email = request.json['users_email']
+    users_type = request.json['users_type']
+
     
+    new_user = Users( users_name, users_surname, users_password, users_email, users_type )
+    db.session.add(new_user)
+    db.session.commit()
+
+    user = Users.query.get(new_user.users_id)
+    typeU = UsersType.query.get(new_user.users_type)
+    print(typeU.userstype_id)
+    result = {
+        "user_id": user.users_id,
+        "user_name": user.users_name,
+        "user_surname": user.users_surname,
+        "user_password": user.users_password,
+        "user_email": user.users_email,
+        "userType":[
+            {
+                "usertype_id": typeU.userstype_id, 
+                "usertype_name": typeU.userstype_name
+            }
+        ],
+        "response": "Accepted"        
+    }
+    return  jsonify(result)
+
+
 ## Users types
 # @app.route('/user_types', methods=['POST'])
 # def create_userTypes():
@@ -233,11 +341,6 @@ def get_categoriesracing():
 #     all_userTypes = UsersType.query.all()
 #     result = userTypes_schema.dump(all_userTypes)
 #     return jsonify(result)
-
-# @app.route('/user_types/<_id>', methods=['GET'])
-# def get_userTypes_id(_id):
-#     userTypes = UsersType.query.get(_id)
-#     return userType_schema.jsonify(userTypes)
 
 # @app.route('/user_types/<_id>', methods=['PUT'])
 # def update_userTypes(_id):
