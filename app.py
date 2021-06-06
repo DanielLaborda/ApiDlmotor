@@ -229,7 +229,6 @@ def get_userTypes_id(_id):
 ## USER- INFO by id
 @app.route('/userInfo/<_id>', methods=['GET'])
 def get_userinfoByid(_id):    
-    user_email = _id
     user = Users.query.get(_id)
 
     typeU = UsersType.query.get(user.users_type)
