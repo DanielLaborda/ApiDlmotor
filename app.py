@@ -103,7 +103,6 @@ class UsersType(db.Model):
     def __init__(self, userstype_name):
         self.userstype_name = userstype_name
         
-
 # MODEL users
 class Users(db.Model):
     users_id = db.Column(db.Integer, primary_key=True)
@@ -120,6 +119,38 @@ class Users(db.Model):
         self.users_email = users_email
         self.users_type = users_type
 
+# MODEL categories
+class Categories(db.Model):
+    categories_id = db.Column(db.Integer, primary_key=True)
+    categories_name = db.Column(db.String(50))
+    categories_image = db.Column(db.BLOB)
+    categories_description = db.Column(db.Text)
+
+    def __init__(self, categories_name, categories_image, categories_description):
+        self.categories_name = categories_name
+        self.categories_image = categories_image
+        self.categories_description = categories_description
+
+# MODEL vehicles
+class Vehicles(db.Model):
+    vehicles_id = db.Column(db.Integer, primary_key=True)
+    vehicles_name = db.Column(db.String(50))
+    vehicles_banner = db.Column(db.BLOB)
+    vehicles_image_category = db.Column(db.BLOB)
+    vehicles_category =  db.Column(db.Integer)
+    vehicles_slogan = db.Column(db.String(100))
+    vehicles_description = db.Column(db.Text)
+    vehicles_warranty = db.Column(db.String(50))
+
+
+    def __init__(self, vehicles_name, vehicles_banner, vehicles_image_category, vehicles_category, vehicles_slogan, vehicles_description, vehicles_warranty):
+        self.vehicles_name = vehicles_name
+        self.vehicles_banner = vehicles_banner
+        self.vehicles_image_category = vehicles_image_category
+        self.vehicles_category = vehicles_category
+        self.vehicles_slogan = vehicles_slogan
+        self.vehicles_description = vehicles_description
+        self.vehicles_warranty = vehicles_warranty
 
 db.create_all()
 
@@ -218,13 +249,11 @@ def get_categoriesracing():
 
     return response
 
-
 ## user_types
 @app.route('/user_types/<_id>', methods=['GET'])
 def get_userTypes_id(_id):
     userTypes = UsersType.query.get(_id)
     return userType_schema.jsonify(userTypes)
-
 
 ## USER- INFO by id
 @app.route('/userInfo/<_id>', methods=['GET'])
@@ -321,6 +350,49 @@ def create_user():
     }
     return  jsonify(result)
 
+## categories
+@app.route('/categories', methods=['GET'])
+def get_categories():
+    categories = Categories.query.all()
+    result = []
+    for category in categories:
+        result.append({
+            "categories_id": category.categories_id,
+            "categories_name": category.categories_name,
+            "categories_image": base64.b64encode(category.categories_image).decode("utf-8"),
+            "categories_description": category.categories_description  
+        })
+
+    db.session.commit()
+    response = jsonify(result)
+
+    return response
+
+## categories
+@app.route('/vehicles', methods=['GET'])
+def get_vehicles():
+    vehicles = Vehicles.query.all()
+    result = []
+    for vehicle in vehicles:
+        result.append({
+            "vehicles_id": vehicle.vehicles_id,
+            "vehicles_name": vehicle.vehicles_name,
+            "vehicles_banner": base64.b64encode(vehicle.vehicles_banner).decode("utf-8"),
+            "vehicles_image_category": base64.b64encode(vehicle.vehicles_image_category).decode("utf-8"),
+            "vehicles_category": vehicle.vehicles_category,
+            "vehicles_slogan": vehicle.vehicles_slogan,
+            "vehicles_description": vehicle.vehicles_description,
+            "vehicles_warranty": vehicle.vehicles_warranty 
+        })
+
+    db.session.commit()
+    response = jsonify(result)
+
+    return response
+
+
+
+
 
 ## Users types
 # @app.route('/user_types', methods=['POST'])
@@ -360,53 +432,6 @@ def create_user():
 
 #     return userType_schema.jsonify(userTypes)
 
-
-# ## Users types
-# @app.route('/users', methods=['GET'])
-# def get_users():
-#     all_users = Users.query.all()
-#     result = users_schema.dump(all_users)
-#     return jsonify(result)
-
-
-# @app.route('/users/<_id>', methods=['GET'])
-# def get_users_id(_id):
-#     user = Users.query.get(_id)
-#     typeU = UsersType.query.get(user.user_type_id)
-
-#     result = {
-#         "user_id": user.user_id,
-#         "user_name": user.user_name,
-#         "user_password": user.user_password,
-#         "user_email": user.user_email,
-#         "userType":[
-#             {
-#                 "usertype_id": typeU.usertype_id, 
-#                 "usertype_name": typeU.usertype_name
-#             }
-#         ]
-        
-#     }
-#     response = jsonify(result)
-#     response.headers.add('Access-Control-Allow-Origin', '*')
-#     return response
-
-# @app.route('/users', methods=['POST'])
-# def create_user():
-#     user_name = request.json['user_name']
-#     user_password = request.json['user_password']
-#     user_email = request.json['user_email']
-#     user_type_id = request.json['user_type_id']
-    
-
-#     new_user = Users( user_name, user_password, user_email, user_type_id )
-#     db.session.add(new_user)
-#     db.session.commit()
-
-#     user = Users.query.get(new_user.user_id)
-#     result = user_schema.dump(user)
-#     return  jsonify(result)
-
 # @app.route('/users/<_id>', methods=['PUT'])
 # def update_user(_id):
 #     user = Users.query.get(_id)
@@ -431,25 +456,7 @@ def create_user():
 #     db.session.commit()
 
 #     return user_schema.jsonify(user)
-
-# # Session
-# @app.route('/sessions', methods=['GET'])
-# def session():
-#     email = request.json['email']
-#     password = request.json['password']
-#     user = Users.query.filter_by(user_email = email).first()
-
-#     if(user):
-#         if (user.user_password == password):
-#             response = get_users_id(user.user_id)
-#             response.headers.add('Access-Control-Allow-Origin', '*')
-#             return response
-#         else:
-#             return "password no correcta"
-#     else:
-#         return "no existe"
-
-    
+  
     
 
 
