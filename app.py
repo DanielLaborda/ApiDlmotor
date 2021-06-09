@@ -1,4 +1,5 @@
 
+import re
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -8,6 +9,8 @@ import base64
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler, test
 import sys
+
+from marshmallow.fields import Method
 
 app = Flask(__name__)
 
@@ -142,7 +145,6 @@ class Vehicles(db.Model):
     vehicles_description = db.Column(db.Text)
     vehicles_warranty = db.Column(db.String(50))
 
-
     def __init__(self, vehicles_name, vehicles_banner, vehicles_image_category, vehicles_category, vehicles_slogan, vehicles_description, vehicles_warranty):
         self.vehicles_name = vehicles_name
         self.vehicles_banner = vehicles_banner
@@ -151,6 +153,105 @@ class Vehicles(db.Model):
         self.vehicles_slogan = vehicles_slogan
         self.vehicles_description = vehicles_description
         self.vehicles_warranty = vehicles_warranty
+
+# MODEL images vehicles
+class Imagesvehicles(db.Model):
+    imagesvehicles_id = db.Column(db.Integer, primary_key=True)
+    imagesvehicles_image =  db.Column(db.BLOB)
+    imagesvehicles_vehicleid = db.Column(db.Integer)
+
+    def __init__(self, imagesvehicles_id, imagesvehicles_image, imagesvehicles_vehicleid):
+        self.imagesvehicles_id = imagesvehicles_id
+        self.imagesvehicles_image = imagesvehicles_image
+        self.imagesvehicles_vehicleid = imagesvehicles_vehicleid
+
+# MODEL Versions vehicles
+class Versionsvehicles(db.Model):
+    versionsvehicles_id = db.Column(db.Integer, primary_key=True)
+    versionsvehicles_name =  db.Column(db.String(50))
+    versionsvehicles_image =  db.Column(db.BLOB)
+    versionsvehicles_baseprice = db.Column(db.FLOAT)
+    versionsvehicles_vehicleid = db.Column(db.Integer)
+
+    def __init__(self, versionsvehicles_id, versionsvehicles_name, versionsvehicles_image, versionsvehicles_baseprice, versionsvehicles_vehicleid):
+        self.versionsvehicles_id = versionsvehicles_id
+        self.versionsvehicles_name = versionsvehicles_name
+        self.versionsvehicles_image = versionsvehicles_image
+        self.versionsvehicles_baseprice = versionsvehicles_baseprice
+        self.versionsvehicles_vehicleid = versionsvehicles_vehicleid
+
+# MODEL complement versions vehicles
+class Complementsversions(db.Model):
+    complementsversions_id = db.Column(db.Integer, primary_key=True)
+    complementsversions_name =  db.Column(db.String(100))
+    complementsversions_versionsid = db.Column(db.Integer)
+
+    def __init__(self, complementsversions_id, complementsversions_name, complementsversions_versionsid):
+        self.complementsversions_id = complementsversions_id
+        self.complementsversions_name = complementsversions_name
+        self.complementsversions_versionsid = complementsversions_versionsid
+
+# MODEL colors vehicles
+class Colorsvehicles(db.Model):
+    colorsvehicles_id = db.Column(db.Integer, primary_key=True)
+    colorsvehicles_name =  db.Column(db.String(50))
+    colorsvehicles_color =  db.Column(db.BLOB)
+    colorsvehicles_imgcolor = db.Column(db.BLOB)
+    colorsvehicles_price = db.Column(db.Integer)
+    colorsvehicles_vehicleid = db.Column(db.Integer)
+
+    def __init__(self, colorsvehicles_id, colorsvehicles_name, colorsvehicles_color, colorsvehicles_imgcolor, colorsvehicles_price, colorsvehicles_vehicleid):
+        self.colorsvehicles_id = colorsvehicles_id
+        self.colorsvehicles_name = colorsvehicles_name
+        self.colorsvehicles_color = colorsvehicles_color
+        self.colorsvehicles_imgcolor = colorsvehicles_imgcolor
+        self.colorsvehicles_price = colorsvehicles_price
+        self.colorsvehicles_vehicleid = colorsvehicles_vehicleid
+
+# MODEL Interiors vehicles
+class Interiorsvehicles(db.Model):
+    interiorsvehicles_id = db.Column(db.Integer, primary_key=True)
+    interiorsvehicles_name =  db.Column(db.String(50))
+    interiorsvehicles_image =  db.Column(db.BLOB)
+    interiorsvehicles_baseprice = db.Column(db.FLOAT)
+    interiorsvehicles_vehicleid = db.Column(db.Integer)
+
+    def __init__(self, interiorsvehicles_id, interiorsvehicles_name, interiorsvehicles_image, interiorsvehicles_baseprice, interiorsvehicles_vehicleid):
+        self.interiorsvehicles_id = interiorsvehicles_id
+        self.interiorsvehicles_name = interiorsvehicles_name
+        self.interiorsvehicles_image = interiorsvehicles_image
+        self.interiorsvehicles_baseprice = interiorsvehicles_baseprice
+        self.interiorsvehicles_vehicleid = interiorsvehicles_vehicleid
+
+# MODEL complement interiors vehicles
+class Complementsinteriors(db.Model):
+    complementsinteriors_id = db.Column(db.Integer, primary_key=True)
+    complementsinteriors_name =  db.Column(db.String(100))
+    complementsinteriors_interiorid = db.Column(db.Integer)
+
+    def __init__(self, complementsinteriors_id, complementsinteriors_name, complementsinteriors_interiorid):
+        self.complementsinteriors_id = complementsinteriors_id
+        self.complementsinteriors_name = complementsinteriors_name
+        self.complementsinteriors_interiorid = complementsinteriors_interiorid
+
+# MODEL rims vehicles
+class Rimsvehicles(db.Model):
+    rimsvehicles_id = db.Column(db.Integer, primary_key=True)
+    rimsvehicles_model =  db.Column(db.String(50))
+    rimsvehicles_size =  db.Column(db.String(50))
+    rimsvehicles_material =  db.Column(db.String(50))
+    rimsvehicles_image =  db.Column(db.BLOB)
+    rimsvehicles_baseprice = db.Column(db.FLOAT)
+    rimsvehicles_vehicleid = db.Column(db.Integer)
+
+    def __init__(self, rimsvehicles_id, rimsvehicles_model, rimsvehicles_size, rimsvehicles_material, rimsvehicles_image, rimsvehicles_baseprice, rimsvehicles_vehicleid):
+        self.rimsvehicles_id = rimsvehicles_id
+        self.rimsvehicles_model = rimsvehicles_model
+        self.rimsvehicles_size = rimsvehicles_size
+        self.rimsvehicles_material = rimsvehicles_material
+        self.rimsvehicles_image = rimsvehicles_image
+        self.rimsvehicles_baseprice = rimsvehicles_baseprice
+        self.rimsvehicles_vehicleid = rimsvehicles_vehicleid
 
 db.create_all()
 
@@ -171,6 +272,12 @@ class UsersSchema(ma.Schema):
         fields = ('users_id', 'users_name', 'users_surname', 'users_password', 'users_email', 'users_type_id')
 user_schema = UsersSchema()
 users_schema = UsersSchema(many=True)
+
+class ComplementsversionsSchema(ma.Schema):
+    class Meta:
+        fields = ('complementsversions_id', 'complementsversions_name', 'complementsversions_versionsid')
+user_schema = ComplementsversionsSchema()
+users_schema = ComplementsversionsSchema(many=True)
 
 
 ## ROUTES
@@ -368,12 +475,69 @@ def get_categories():
 
     return response
 
-## categories
+## Vehicles
 @app.route('/vehicles', methods=['GET'])
 def get_vehicles():
     vehicles = Vehicles.query.all()
     result = []
+
     for vehicle in vehicles:
+        images = Imagesvehicles.query.filter(Imagesvehicles.imagesvehicles_vehicleid == vehicle.vehicles_id).all()
+        imagesVehicles = []
+        for image in images:
+            imagesVehicles.append({
+                "vehicleimage_id": image.imagesvehicles_id,
+                "vehicleimage_image": base64.b64encode(image.imagesvehicles_image).decode("utf-8")
+            })
+
+        versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == vehicle.vehicles_id).all()
+        versionsVehicles = []
+        for version in versions:
+            version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
+            versionsVehicles.append({
+                'versionsVehicles_id': version.versionsvehicles_id,
+                'versionsvehicles_name': version.versionsvehicles_name,
+                'versionsvehicles_image': base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
+                'versionsvehicles_baseprice': version.versionsvehicles_baseprice,
+                'versionsvehicles_components': version_list
+            }) 
+
+        colors = Colorsvehicles.query.filter(Colorsvehicles.colorsvehicles_vehicleid == vehicle.vehicles_id).all()
+        colorsVehicles = []
+        for color in colors:
+            colorsVehicles.append({
+                'colors_id': color.colorsvehicles_id,
+                'colors_name': color.colorsvehicles_name,
+                'colors_color': base64.b64encode(color.colorsvehicles_color).decode("utf-8"),
+                'colors_image': base64.b64encode(color.colorsvehicles_imgcolor).decode("utf-8"),
+                'colors_price': color.colorsvehicles_price,
+            })
+
+        interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == vehicle.vehicles_id).all()
+        interiorsVehicles = []
+        for interior in interiors:
+            interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
+            interiorsVehicles.append({
+                'interior_id': interior.interiorsvehicles_id,
+                'interior_name': interior.interiorsvehicles_name,
+                'interior_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
+                'interior_basePrice': interior.interiorsvehicles_baseprice,
+                'interior_components': interiors_components
+            })
+
+
+        rims = Rimsvehicles.query.filter(Rimsvehicles.rimsvehicles_vehicleid == vehicle.vehicles_id).all()
+        rimsVehicles = []
+        for rim in rims:
+            rimsVehicles.append({
+                'rims_id': rim.rimsvehicles_id,
+                'rims_model': rim.rimsvehicles_model,
+                'rims_size': rim.rimsvehicles_size,
+                'rims_material': rim.rimsvehicles_material,
+                'rims_image': base64.b64encode(rim.rimsvehicles_image).decode("utf-8"),
+                'rims_baseprice': rim.rimsvehicles_baseprice
+            })
+
         result.append({
             "vehicles_id": vehicle.vehicles_id,
             "vehicles_name": vehicle.vehicles_name,
@@ -382,7 +546,12 @@ def get_vehicles():
             "vehicles_category": vehicle.vehicles_category,
             "vehicles_slogan": vehicle.vehicles_slogan,
             "vehicles_description": vehicle.vehicles_description,
-            "vehicles_warranty": vehicle.vehicles_warranty 
+            "vehicles_warranty": vehicle.vehicles_warranty,
+            "vehicles_images": imagesVehicles,
+             "vehicles_version": versionsVehicles,
+            "vehicles_colors": colorsVehicles,
+            "vehicles_interiors": interiorsVehicles,
+            "vehicles_rims": rimsVehicles
         })
 
     db.session.commit()
@@ -391,6 +560,123 @@ def get_vehicles():
     return response
 
 
+## Vehicles
+@app.route('/vehiclesbyid/<_id>', methods=['GET'])
+def get_vehicles_by_id(_id):
+    vehicle = Vehicles.query.get(_id)
+    images = Imagesvehicles.query.filter(Imagesvehicles.imagesvehicles_vehicleid == _id).all()
+    imagesVehicles = []
+    for image in images:
+        imagesVehicles.append({
+            "vehicleimage_id": image.imagesvehicles_id,
+            "vehicleimage_image": base64.b64encode(image.imagesvehicles_image).decode("utf-8")
+        })
+
+    versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == _id).all()
+    versionsVehicles = []
+    for version in versions:
+        version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
+        versionsVehicles.append({
+            'versionsVehicles_id': version.versionsvehicles_id,
+            'versionsvehicles_name': version.versionsvehicles_name,
+            'versionsvehicles_image': base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
+            'versionsvehicles_baseprice': version.versionsvehicles_baseprice,
+            'versionsvehicles_components': version_list
+        }) 
+
+    colors = Colorsvehicles.query.filter(Colorsvehicles.colorsvehicles_vehicleid == _id).all()
+    colorsVehicles = []
+    for color in colors:
+        colorsVehicles.append({
+            'colors_id': color.colorsvehicles_id,
+            'colors_name': color.colorsvehicles_name,
+            'colors_color': base64.b64encode(color.colorsvehicles_color).decode("utf-8"),
+            'colors_image': base64.b64encode(color.colorsvehicles_imgcolor).decode("utf-8"),
+            'colors_price': color.colorsvehicles_price,
+        })
+
+    interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == _id).all()
+    interiorsVehicles = []
+    for interior in interiors:
+        interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
+        interiorsVehicles.append({
+            'interior_id': interior.interiorsvehicles_id,
+            'interior_name': interior.interiorsvehicles_name,
+            'interior_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
+            'interior_basePrice': interior.interiorsvehicles_baseprice,
+            'interior_components': interiors_components
+        })
+
+
+    rims = Rimsvehicles.query.filter(Rimsvehicles.rimsvehicles_vehicleid == _id).all()
+    rimsVehicles = []
+    for rim in rims:
+        rimsVehicles.append({
+            'rims_id': rim.rimsvehicles_id,
+            'rims_model': rim.rimsvehicles_model,
+            'rims_size': rim.rimsvehicles_size,
+            'rims_material': rim.rimsvehicles_material,
+            'rims_image': base64.b64encode(rim.rimsvehicles_image).decode("utf-8"),
+            'rims_baseprice': rim.rimsvehicles_baseprice
+        })
+
+
+    result = {
+        "vehicles_id": vehicle.vehicles_id,
+        "vehicles_name": vehicle.vehicles_name,
+        "vehicles_banner": base64.b64encode(vehicle.vehicles_banner).decode("utf-8"),
+        "vehicles_image_category": base64.b64encode(vehicle.vehicles_image_category).decode("utf-8"),
+        "vehicles_category": vehicle.vehicles_category,
+        "vehicles_slogan": vehicle.vehicles_slogan,
+        "vehicles_description": vehicle.vehicles_description,
+        "vehicles_warranty": vehicle.vehicles_warranty,
+        "vehicles_images": imagesVehicles,
+        "vehicles_version": versionsVehicles,
+        "vehicles_colors": colorsVehicles,
+        "vehicles_interiors": interiorsVehicles,
+        "vehicles_rims": rimsVehicles
+    }
+
+    db.session.commit()
+    response = jsonify(result)
+
+    return response
+
+@app.route('/complementversion/<_id>', methods=['GET'])
+def get_complementsversion_byversionId(_id):
+    complementsversions = Complementsversions.query.filter(Complementsversions.complementsversions_versionsid == _id).all()
+    result = []
+    for component in complementsversions:
+        result.append(component.complementsversions_name)
+
+    db.session.commit()
+    return result
+
+@app.route('/colorsVehicle/<_id>', methods=['GET'])
+def get_colors_byvehicle(_id):
+    colors = Colorsvehicles.query.filter(Colorsvehicles.colorsvehicles_vehicleid == _id).all()
+    result = []
+    for color in colors:
+        result.append({
+            'color_id': color.colorsvehicles_id,
+            'color_name': color.colorsvehicles_name,
+            'color_color': color.colorsvehicles_color,
+            'color_image': color.colorsvehicles_imgcolor,
+            'color_price': color.colorsvehicles_price,
+        })
+
+    db.session.commit()
+    return result
+
+@app.route('/colorsInteriors/<_id>', methods=['GET'])
+def get_componentInteriors_byvehicle(_id):
+    comonentsInterior = Complementsinteriors.query.filter(Complementsinteriors.complementsinteriors_interiorid == _id).all()
+    result = []
+    for component in comonentsInterior:
+        result.append(component.complementsinteriors_name)
+
+    db.session.commit()
+    return result
 
 
 
