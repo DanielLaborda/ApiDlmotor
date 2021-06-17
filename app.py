@@ -446,34 +446,40 @@ def get_userinfoByid(_id):
 def get_userinfo(email, password):    
     user_email = email
     user_password = password
-    user = Users.query.filter(Users.users_email == user_email).one()
-
-    if(user):
-        if (user_password == user.users_password):
-            typeU = UsersType.query.get(user.users_type)
-            result = {
-                "user_id": user.users_id,
-                "user_name": user.users_name,
-                "user_surname": user.users_surname,
-                "user_password": user.users_password,
-                "user_email": user.users_email,
-                "userType":[
-                    {
-                        "usertype_id": typeU.userstype_id, 
-                        "usertype_name": typeU.userstype_name
-                    }
-                ],
-                "response": "Accepted"        
-            }
+    exist = Users.query.filter(Users.users_email == user_email).all()
+    if (exist):
+        user = Users.query.filter(Users.users_email == user_email).one()
+        if(user):
+            if (user_password == user.users_password):
+                typeU = UsersType.query.get(user.users_type)
+                result = {
+                    "user_id": user.users_id,
+                    "user_name": user.users_name,
+                    "user_surname": user.users_surname,
+                    "user_password": user.users_password,
+                    "user_email": user.users_email,
+                    "userType":[
+                        {
+                            "usertype_id": typeU.userstype_id, 
+                            "usertype_name": typeU.userstype_name
+                        }
+                    ],
+                    "response": "Accepted"        
+                }
+            else:
+                result = {
+                    "response": "Wrong email or password"
+                }
         else:
             result = {
-                "response": "Declined"
+                "response": "Wrong email or password"
             }
+
     else:
         result = {
-            "response": "Declined"
+            "response": "Account not Found"
         }
-
+   
     db.session.commit()
     response = jsonify(result)
     return response
@@ -487,28 +493,35 @@ def create_user():
     users_email = request.json['users_email']
     users_type = request.json['users_type']
 
-    
-    new_user = Users( users_name, users_surname, users_password, users_email, users_type )
-    db.session.add(new_user)
-    db.session.commit()
+    exist = Users.query.filter(Users.users_email == users_email).all()
+    if (exist):
+        result = {
+            "response": "There is an account with this email!"
+        }
+    else:
+        new_user = Users( users_name, users_surname, users_password, users_email, users_type )
+        db.session.add(new_user)
+        db.session.commit()
 
-    user = Users.query.get(new_user.users_id)
-    typeU = UsersType.query.get(new_user.users_type)
-    print(typeU.userstype_id)
-    result = {
-        "user_id": user.users_id,
-        "user_name": user.users_name,
-        "user_surname": user.users_surname,
-        "user_password": user.users_password,
-        "user_email": user.users_email,
-        "userType":[
-            {
-                "usertype_id": typeU.userstype_id, 
-                "usertype_name": typeU.userstype_name
-            }
-        ],
-        "response": "Accepted"        
-    }
+        user = Users.query.get(new_user.users_id)
+        typeU = UsersType.query.get(new_user.users_type)
+        print(typeU.userstype_id)
+        result = {
+            "user_id": user.users_id,
+            "user_name": user.users_name,
+            "user_surname": user.users_surname,
+            "user_password": user.users_password,
+            "user_email": user.users_email,
+            "userType":[
+                {
+                    "usertype_id": typeU.userstype_id, 
+                    "usertype_name": typeU.userstype_name
+                }
+            ],
+            "response": "Accepted"        
+        }
+    
+       
     db.session.commit()
     return  jsonify(result)
 
