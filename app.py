@@ -18,9 +18,9 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sql11416217:AGfCIW1zeC@sql11.freemysqlhosting.net/sql11416217'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -538,6 +538,8 @@ def get_categories():
             "categories_description": category.categories_description  
         })
 
+    
+
     db.session.commit()
     response = jsonify(result)
 
@@ -561,6 +563,7 @@ def get_vehicles():
         versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == vehicle.vehicles_id).all()
         versionsVehicles = []
         for version in versions:
+
             version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
             versionsVehicles.append({
                 'versionsVehicles_id': version.versionsvehicles_id,
@@ -852,7 +855,6 @@ def get_quotesByEmail(email):
 
 @app.route('/quotes', methods=['POST'])
 def create_quote():
-    # quotes_date = request.json['quotes_date']
     quotes_date = datetime.datetime.now()
     quotes_customer = request.json['quotes_customer']
     quotes_email = request.json['quotes_email']
@@ -1028,82 +1030,6 @@ def get_quotes_status():
     result = quotesStatus_schema.dump(all_quotestatus)
     return jsonify(result)
 
-
-
-#     new_userType = UsersType( usertype_name )
-#     db.session.add(new_userType)
-#     db.session.commit()
-
-#     userType = UsersType.query.get(new_userType.usertype_id)
-#     result = userType_schema.dump(userType)
-#     return  jsonify(result)
-
-
-
-## Users types
-# @app.route('/user_types', methods=['POST'])
-# def create_userTypes():
-#     usertype_name = request.json['usertype_name']
-
-#     new_userType = UsersType( usertype_name )
-#     db.session.add(new_userType)
-#     db.session.commit()
-
-#     userType = UsersType.query.get(new_userType.usertype_id)
-#     result = userType_schema.dump(userType)
-#     return  jsonify(result)
-
-# @app.route('/user_types', methods=['GET'])
-# def get_userTypes():
-#     all_userTypes = UsersType.query.all()
-#     result = userTypes_schema.dump(all_userTypes)
-#     return jsonify(result)
-
-# @app.route('/user_types/<_id>', methods=['PUT'])
-# def update_userTypes(_id):
-#     userTypes = UsersType.query.get(_id)
-#     name = request.json['name']
-
-#     userTypes.name = name
-#     db.session.commit()
-
-#     return userType_schema.jsonify(userTypes)
-
-# @app.route('/user_types/<_id>', methods=['DELETE'])
-# def delete_userTypes(_id):
-#     userTypes = UsersType.query.get(_id)
-    
-#     db.session.delete(userTypes)
-#     db.session.commit()
-
-#     return userType_schema.jsonify(userTypes)
-
-# @app.route('/users/<_id>', methods=['PUT'])
-# def update_user(_id):
-#     user = Users.query.get(_id)
-#     user_name = request.json['user_name']
-#     user_password = request.json['user_password']
-#     user_email = request.json['user_email']
-#     user_type_id = request.json['user_type_id']
-
-#     user.user_name = user_name
-#     user.user_password = user_password
-#     user.user_email = user_email
-#     user.user_type_id = user_type_id
-#     db.session.commit()
-
-#     return user_schema.jsonify(user)
-
-# @app.route('/users/<_id>', methods=['DELETE'])
-# def delete_user(_id):
-#     user = Users.query.get(_id)
-    
-#     db.session.delete(user)
-#     db.session.commit()
-
-#     return user_schema.jsonify(user)
-  
-    
 
 
 if __name__ == '__main__':
