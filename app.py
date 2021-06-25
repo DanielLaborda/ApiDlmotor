@@ -12,16 +12,17 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler, test
 import sys
 
 from marshmallow.fields import DateTime, Method
+from sqlalchemy.orm import query
 
 app = Flask(__name__)
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -815,6 +816,16 @@ def get_quote_id(_id):
 
     return response
 
+@app.route('/quotes/<_id>', methods=['DELETE'])
+def delete_quote(_id):
+    quote = Quotes.query.get(_id)
+    
+    db.session.delete(quote)
+    db.session.commit()
+
+    return 'deleted'
+
+
 @app.route('/quotesByEmail/<email>', methods=['GET'])
 def get_quotesByEmail(email):
     quotes = Quotes.query.filter(Quotes.quotes_email == email).all()
@@ -1035,4 +1046,4 @@ def get_quotes_status():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
+    
