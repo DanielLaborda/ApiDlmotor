@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import datetime
 
-from flask_cors import CORS
+#from flask_cors import CORS
 import base64
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler, test
@@ -16,12 +16,12 @@ from sqlalchemy.orm import query
 
 app = Flask(__name__)
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+#cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
