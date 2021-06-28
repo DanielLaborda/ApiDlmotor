@@ -1,12 +1,18 @@
 import flask
-from flask import request
+from flask import request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+from datetime import datetime as dt
+import base64
 
 app = flask.Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 
 @app.route('/', methods=['GET'])
 def home():
-    return "Hola"
-#----------------------------------------------------------------------
+    return f'Its working'
+        
+
 # from flask import Flask, request, jsonify
 # from flask_sqlalchemy import SQLAlchemy
 # from flask_marshmallow import Marshmallow
