@@ -1,3 +1,4 @@
 flask
-flask-SQLAlchemy
+flask_sqlalchemy
+flask_marshmallow
 gunicorn
