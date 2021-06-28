@@ -1,5 +1,5 @@
 import flask
-from flask import request
+from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from datetime import datetime as dt
@@ -8,10 +8,53 @@ import base64
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
+
+# MODEL RacingTeam
+class Racingteam(db.Model):
+    racingteam_id = db.Column(db.Integer, primary_key=True)
+    racingteam_name = db.Column(db.String(50))
+    racingteam_slogan = db.Column(db.String(100))
+    racingteam_description = db.Column(db.Text)
+    racingteam_description2 = db.Column(db.Text)
+    racingteam_video = db.Column(db.String(100))
+    
+    def __init__(self,  racingteam_name, racingteam_slogan, racingteam_description, racingteam_description2, racingteam_video):
+        self.racingteam_name = racingteam_name
+        self.racingteam_slogan = racingteam_slogan
+        self.racingteam_description = racingteam_description
+        self.racingteam_description2 = racingteam_description2
+        self.racingteam_video = racingteam_video
+
+#ROUTE
+#home
 @app.route('/', methods=['GET'])
 def home():
     return f'Its working'
-        
+
+# RacingTeam
+@app.route('/racingTeam/<_id>', methods=['GET'])
+def get_racingTeam(_id):
+    racingTeam = Racingteam.query.get(_id)
+#    imagesBanner = Imagesbannerracing.query.filter(Imagesbannerracing.ImagesBannerRacing_racingteam == _id).all()
+    
+    resultImages = []
+    # for image in imagesBanner:
+    #     resultImages.append(base64.b64encode(image.ImagesBannerRacing_image).decode("utf-8") )
+    
+    result = {
+        "racingTeam_name": racingTeam.racingteam_name,
+        "racingTeam_slogan": racingTeam.racingteam_slogan,
+        "racingTeam_description": racingTeam.racingteam_description,
+        "racingTeam_description2": racingTeam.racingteam_description2,
+        "racingTeam_video": racingTeam.racingteam_video,
+        "racingTeam_imagesBanner":  resultImages  
+    }
+    
+    db.session.commit()
+    response = jsonify(result)
+    return response   
 
 # from flask import Flask, request, jsonify
 # from flask_sqlalchemy import SQLAlchemy
