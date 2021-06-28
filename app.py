@@ -1,5 +1,5 @@
 import flask
-from flask import request, jsonify
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from datetime import datetime as dt
