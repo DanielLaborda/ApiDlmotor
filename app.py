@@ -1,5 +1,4 @@
 
-import re
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -8,11 +7,6 @@ import datetime
 #from flask_cors import CORS
 import base64
 
-from http.server import HTTPServer, SimpleHTTPRequestHandler, test
-import sys
-
-from marshmallow.fields import DateTime, Method
-from sqlalchemy.orm import query
 
 app = Flask(__name__)
 
