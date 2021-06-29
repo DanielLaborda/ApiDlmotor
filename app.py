@@ -122,7 +122,7 @@ def home():
     return f'Its working'
 
 #company
-@app.route('/company', methods=['GET'])
+@app.route('/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
     company = Company.query.get(_id)
