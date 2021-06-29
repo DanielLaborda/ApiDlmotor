@@ -73,7 +73,7 @@ class Imagesbannerracing(db.Model):
         self.ImagesBannerRacing_racingteam = ImagesBannerRacing_racingteam
 
 # MODEL Categoriesracing
-class Categoriesracing(db.Model):
+class categoriesracing(db.Model):
     categoriesracing_id = db.Column(db.Integer, primary_key=True)
     categoriesracing_name = db.Column(db.String(50))
     categoriesracing_image = db.Column(db.BLOB)
@@ -149,7 +149,7 @@ def get_racingTeam(_id):
 #categoriesRacing
 @app.route('/categoriesRacing', methods=['GET'])
 def get_categoriesracing():
-    categoriesracing = Categoriesracing.query.all()
+    categoriesracing = categoriesracing.query.all()
     
     result = []
     for category in categoriesracing:
