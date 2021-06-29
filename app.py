@@ -33,6 +33,22 @@ class UsersType(db.Model):
     def __init__(self, userstype_name):
         self.userstype_name = userstype_name
 
+# MODEL USERS
+class Users(db.Model):
+    users_id = db.Column(db.Integer, primary_key=True)
+    users_name = db.Column(db.String(50))
+    users_surname = db.Column(db.String(50))
+    users_password = db.Column(db.String(25))
+    users_email = db.Column(db.String(50))
+    users_type = db.Column(db.Integer)
+
+    def __init__(self, users_name, users_surname, users_password, users_email, users_type):
+        self.users_name = users_name
+        self.users_surname = users_surname
+        self.users_password = users_password
+        self.users_email = users_email
+        self.users_type = users_type
+
 # MODEL GARAGE
 class Garage(db.Model):
     garage_id = db.Column(db.Integer, primary_key=True)
@@ -127,6 +143,30 @@ def get_userTypes_id(_id):
     userTypes = UsersType.query.get(_id)
     return userType_schema.jsonify(userTypes)
 
+# USER- INFO by id
+@app.route('/userInfo/<_id>', methods=['GET'])
+def get_userinfoByid(_id):    
+    user = Users.query.get(_id)
+    typeU = UsersType.query.get(user.users_type)
+    result = {
+        "user_id": user.users_id,
+        "user_name": user.users_name,
+        "user_surname": user.users_surname,
+        "user_password": user.users_password,
+        "user_email": user.users_email,
+        "userType":[
+            {
+                "usertype_id": typeU.userstype_id, 
+                "usertype_name": typeU.userstype_name
+            }
+        ],
+        "response": "Accepted"        
+    }
+
+    db.session.commit()
+    response = jsonify(result)
+    return response
+
 #garage
 @app.route('/garage/<_id>', methods=['GET'])
 def get_garage(_id):
@@ -196,21 +236,7 @@ def get_categoriesracing():
 
 
         
-# # MODEL users
-# class Users(db.Model):
-#     users_id = db.Column(db.Integer, primary_key=True)
-#     users_name = db.Column(db.String(50))
-#     users_surname = db.Column(db.String(50))
-#     users_password = db.Column(db.String(25))
-#     users_email = db.Column(db.String(50))
-#     users_type = db.Column(db.Integer)
 
-#     def __init__(self, users_name, users_surname, users_password, users_email, users_type):
-#         self.users_name = users_name
-#         self.users_surname = users_surname
-#         self.users_password = users_password
-#         self.users_email = users_email
-#         self.users_type = users_type
 
 # # MODEL categories
 # class Categories(db.Model):
@@ -421,30 +447,7 @@ def get_categoriesracing():
 
 
 
-# ## USER- INFO by id
-# @app.route('/userInfo/<_id>', methods=['GET'])
-# def get_userinfoByid(_id):    
-#     user = Users.query.get(_id)
 
-#     typeU = UsersType.query.get(user.users_type)
-#     result = {
-#         "user_id": user.users_id,
-#         "user_name": user.users_name,
-#         "user_surname": user.users_surname,
-#         "user_password": user.users_password,
-#         "user_email": user.users_email,
-#         "userType":[
-#             {
-#                 "usertype_id": typeU.userstype_id, 
-#                 "usertype_name": typeU.userstype_name
-#             }
-#         ],
-#         "response": "Accepted"        
-#     }
-
-#     db.session.commit()
-#     response = jsonify(result)
-#     return response
 
 # ## USER- INFO login
 # @app.route('/userInfo/<email>/<password>', methods=['GET'])
