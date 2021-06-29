@@ -26,6 +26,25 @@ class Company(db.Model):
         self.company_description = company_description
         self.company_contact = company_contact
 
+
+# MODEL GARAGE
+class Garage(db.Model):
+    garage_id = db.Column(db.Integer, primary_key=True)
+    garage_name = db.Column(db.String(45))
+    garage_description = db.Column(db.Text)
+    garage_contact = db.Column(db.String(11))
+    garage_positionX = db.Column(db.FLOAT)
+    garage_positionY = db.Column(db.FLOAT)
+    garage_image = db.Column(db.BLOB)
+    
+    def __init__(self,  garage_name, garage_description, garage_contact, garage_positionX, garage_positionY, garage_image):
+        self.garage_name = garage_name
+        self.garage_description = garage_description
+        self.garage_contact = garage_contact
+        self.garage_positionX = garage_positionX
+        self.garage_positionY = garage_positionY
+        self.garage_image = garage_image
+
 # MODEL RacingTeam
 class Racingteam(db.Model):
     racingteam_id = db.Column(db.Integer, primary_key=True)
@@ -75,6 +94,22 @@ def get_company(_id):
 
     return response
 
+#garage
+@app.route('/garage/<_id>', methods=['GET'])
+def get_garage(_id):
+    garage = Garage.query.get(_id)
+    result = {
+        "garage_name": garage.garage_name,
+        "garage_description": garage.garage_description,
+        "garage_contact": garage.garage_contact,
+        "garage_position": [garage.garage_positionX, garage.garage_positionY],
+        "garage_image":  base64.b64encode(garage.garage_image).decode("utf-8")   
+    }
+    
+    db.session.commit()
+    response = jsonify(result)
+    return response
+
 # RacingTeam
 @app.route('/racingTeam/<_id>', methods=['GET'])
 def get_racingTeam(_id):
@@ -104,23 +139,6 @@ def get_racingTeam(_id):
 
 # 
         
-# # MODEL GARAGE
-# class Garage(db.Model):
-#     garage_id = db.Column(db.Integer, primary_key=True)
-#     garage_name = db.Column(db.String(45))
-#     garage_description = db.Column(db.Text)
-#     garage_contact = db.Column(db.String(11))
-#     garage_positionX = db.Column(db.FLOAT)
-#     garage_positionY = db.Column(db.FLOAT)
-#     garage_image = db.Column(db.BLOB)
-    
-#     def __init__(self,  garage_name, garage_description, garage_contact, garage_positionX, garage_positionY, garage_image):
-#         self.garage_name = garage_name
-#         self.garage_description = garage_description
-#         self.garage_contact = garage_contact
-#         self.garage_positionX = garage_positionX
-#         self.garage_positionY = garage_positionY
-#         self.garage_image = garage_image
 
 
 
@@ -369,21 +387,7 @@ def get_racingTeam(_id):
 
 
 
-# ## Garage
-# @app.route('/garage/<_id>', methods=['GET'])
-# def get_garage(_id):
-#     garage = Garage.query.get(_id)
-#     result = {
-#         "garage_name": garage.garage_name,
-#         "garage_description": garage.garage_description,
-#         "garage_contact": garage.garage_contact,
-#         "garage_position": [garage.garage_positionX, garage.garage_positionY],
-#         "garage_image":  base64.b64encode(garage.garage_image).decode("utf-8")   
-#     }
-    
-#     db.session.commit()
-#     response = jsonify(result)
-#     return response
+
 
 
 # ## categoriesRacing
