@@ -120,12 +120,14 @@ userTypes_schema = UserTypesSchema(many=True)
 
 #ROUTES
 #home
+
 @app.route('/', methods=['GET'])
 def home():
     return f'Its working'
 
 #company
 @app.route('/company/', methods=['GET'])
+@cross_origin()
 def get_company():
     _id = request.args['id']
     company = Company.query.get(_id)
