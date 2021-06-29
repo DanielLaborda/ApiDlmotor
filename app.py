@@ -27,6 +27,17 @@ class Racingteam(db.Model):
         self.racingteam_description2 = racingteam_description2
         self.racingteam_video = racingteam_video
 
+# MODEL ImagesBannerRacing
+class Imagesbannerracing(db.Model):
+    ImagesBannerRacing_id = db.Column(db.Integer, primary_key=True)
+    ImagesBannerRacing_image = db.Column(db.BLOB)
+    ImagesBannerRacing_racingteam = db.Column(db.Integer)
+
+    def __init__(self,  ImagesBannerRacing_id, ImagesBannerRacing_image, ImagesBannerRacing_racingteam):
+        self.ImagesBannerRacing_id = ImagesBannerRacing_id
+        self.ImagesBannerRacing_image = ImagesBannerRacing_image
+        self.ImagesBannerRacing_racingteam = ImagesBannerRacing_racingteam
+
 #ROUTE
 #home
 @app.route('/', methods=['GET'])
@@ -37,11 +48,11 @@ def home():
 @app.route('/racingTeam/<_id>', methods=['GET'])
 def get_racingTeam(_id):
     racingTeam = Racingteam.query.get(_id)
-#    imagesBanner = Imagesbannerracing.query.filter(Imagesbannerracing.ImagesBannerRacing_racingteam == _id).all()
+    imagesBanner = Imagesbannerracing.query.filter(Imagesbannerracing.ImagesBannerRacing_racingteam == _id).all()
     
     resultImages = []
-    # for image in imagesBanner:
-    #     resultImages.append(base64.b64encode(image.ImagesBannerRacing_image).decode("utf-8") )
+    for image in imagesBanner:
+        resultImages.append(base64.b64encode(image.ImagesBannerRacing_image).decode("utf-8") )
     
     result = {
         "racingTeam_name": racingTeam.racingteam_name,
