@@ -117,7 +117,6 @@ userTypes_schema = UserTypesSchema(many=True)
 
 #ROUTES
 #home
-
 @app.route('/', methods=['GET'])
 def home():
     return f'Its working'
