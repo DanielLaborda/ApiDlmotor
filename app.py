@@ -7,9 +7,24 @@ import base64
 
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
+# #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+
+# MODEL COMPANY
+class Company(db.Model):
+    company_id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String(45))
+    company_logo = db.Column(db.BLOB)
+    company_description = db.Column(db.Text)
+    company_contact = db.Column(db.String(11))
+    
+    def __init__(self,  company_name, company_logo, company_description, company_contact):
+        self.company_name = company_name
+        self.company_logo = company_logo
+        self.company_description = company_description
+        self.company_contact = company_contact
 
 # MODEL RacingTeam
 class Racingteam(db.Model):
@@ -38,11 +53,27 @@ class Imagesbannerracing(db.Model):
         self.ImagesBannerRacing_image = ImagesBannerRacing_image
         self.ImagesBannerRacing_racingteam = ImagesBannerRacing_racingteam
 
-#ROUTE
+#ROUTES
 #home
 @app.route('/', methods=['GET'])
 def home():
     return f'Its working'
+
+#company
+@app.route('/company/<_id>', methods=['GET'])
+def get_company(_id):
+    company = Company.query.get(_id)
+  
+    result = {
+        "company_name": company.company_name,
+        "company_description": company.company_description,
+        "company_contact": company.company_contact,
+        "company_logo":  base64.b64encode(company.company_logo).decode("utf-8")   
+    }
+    db.session.commit()
+    response = jsonify(result)
+
+    return response
 
 # RacingTeam
 @app.route('/racingTeam/<_id>', methods=['GET'])
@@ -67,42 +98,11 @@ def get_racingTeam(_id):
     response = jsonify(result)
     return response   
 
-# from flask import Flask, request, jsonify
-# from flask_sqlalchemy import SQLAlchemy
-# from flask_marshmallow import Marshmallow
-# import datetime
-
-# #from flask_cors import CORS
-# import base64
 
 
-# app = Flask(__name__)
-
-# #cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-# #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
-
-# #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# db = SQLAlchemy(app)
-# ma = Marshmallow(app)
-
-# # MODEL COMPANY
-# class Company(db.Model):
-#     company_id = db.Column(db.Integer, primary_key=True)
-#     company_name = db.Column(db.String(45))
-#     company_logo = db.Column(db.BLOB)
-#     company_description = db.Column(db.Text)
-#     company_contact = db.Column(db.String(11))
-    
-#     def __init__(self,  company_name, company_logo, company_description, company_contact):
-#         self.company_name = company_name
-#         self.company_logo = company_logo
-#         self.company_description = company_description
-#         self.company_contact = company_contact
+# 
         
 # # MODEL GARAGE
 # class Garage(db.Model):
@@ -122,32 +122,8 @@ def get_racingTeam(_id):
 #         self.garage_positionY = garage_positionY
 #         self.garage_image = garage_image
 
-# # MODEL RacingTeam
-# class Racingteam(db.Model):
-#     racingteam_id = db.Column(db.Integer, primary_key=True)
-#     racingteam_name = db.Column(db.String(50))
-#     racingteam_slogan = db.Column(db.String(100))
-#     racingteam_description = db.Column(db.Text)
-#     racingteam_description2 = db.Column(db.Text)
-#     racingteam_video = db.Column(db.String(100))
-    
-#     def __init__(self,  racingteam_name, racingteam_slogan, racingteam_description, racingteam_description2, racingteam_video):
-#         self.racingteam_name = racingteam_name
-#         self.racingteam_slogan = racingteam_slogan
-#         self.racingteam_description = racingteam_description
-#         self.racingteam_description2 = racingteam_description2
-#         self.racingteam_video = racingteam_video
 
-# # MODEL ImagesBannerRacing
-# class Imagesbannerracing(db.Model):
-#     ImagesBannerRacing_id = db.Column(db.Integer, primary_key=True)
-#     ImagesBannerRacing_image = db.Column(db.BLOB)
-#     ImagesBannerRacing_racingteam = db.Column(db.Integer)
 
-#     def __init__(self,  ImagesBannerRacing_id, ImagesBannerRacing_image, ImagesBannerRacing_racingteam):
-#             self.ImagesBannerRacing_id = ImagesBannerRacing_id
-#             self.ImagesBannerRacing_image = ImagesBannerRacing_image
-#             self.ImagesBannerRacing_racingteam = ImagesBannerRacing_racingteam
 
 # # MODEL Categoriesracing
 # class Categoriesracing(db.Model):
@@ -367,12 +343,6 @@ def get_racingTeam(_id):
 
 # db.create_all()
 
-# class CompanySchema(ma.Schema):
-#     class Meta:
-#         fields = ('company_id', 'company_name', 'company_description', 'company_contact', 'company_logo')
-# company_schema = CompanySchema()
-# companys_schema = CompanySchema(many=True)
-
 # class UserTypesSchema(ma.Schema):
 #     class Meta:
 #         fields = ('userstype_id', 'userstype_name')
@@ -398,23 +368,6 @@ def get_racingTeam(_id):
 # quotesStatus_schema = QuotesstatusSchema(many=True)
 
 
-# ## ROUTES
-# ## company
-# @app.route('/company/<_id>', methods=['GET'])
-# def get_company(_id):
-#     company = Company.query.get(_id)
-    
-#     result = {
-#         "company_name": company.company_name,
-#         "company_description": company.company_description,
-#         "company_contact": company.company_contact,
-#         "company_logo":  base64.b64encode(company.company_logo).decode("utf-8")   
-#     }
-
-#     db.session.commit()
-#     response = jsonify(result)
-
-#     return response
 
 # ## Garage
 # @app.route('/garage/<_id>', methods=['GET'])
@@ -432,29 +385,6 @@ def get_racingTeam(_id):
 #     response = jsonify(result)
 #     return response
 
-
-# ## RacingTeam
-# @app.route('/racingTeam/<_id>', methods=['GET'])
-# def get_racingTeam(_id):
-#     racingTeam = Racingteam.query.get(_id)
-#     imagesBanner = Imagesbannerracing.query.filter(Imagesbannerracing.ImagesBannerRacing_racingteam == _id).all()
-    
-#     resultImages = []
-#     for image in imagesBanner:
-#         resultImages.append(base64.b64encode(image.ImagesBannerRacing_image).decode("utf-8") )
-    
-#     result = {
-#         "racingTeam_name": racingTeam.racingteam_name,
-#         "racingTeam_slogan": racingTeam.racingteam_slogan,
-#         "racingTeam_description": racingTeam.racingteam_description,
-#         "racingTeam_description2": racingTeam.racingteam_description2,
-#         "racingTeam_video": racingTeam.racingteam_video,
-#         "racingTeam_imagesBanner":  resultImages  
-#     }
-    
-#     db.session.commit()
-#     response = jsonify(result)
-#     return response
 
 # ## categoriesRacing
 # @app.route('/categoriesRacing', methods=['GET'])
