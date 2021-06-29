@@ -5,12 +5,9 @@ from flask_marshmallow import Marshmallow
 from datetime import datetime as dt
 import base64
 
-from flask_cors import CORS
-
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 # #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
-CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -127,7 +124,6 @@ def home():
 
 #company
 @app.route('/company/', methods=['GET'])
-@cross_origin()
 def get_company():
     _id = request.args['id']
     company = Company.query.get(_id)
