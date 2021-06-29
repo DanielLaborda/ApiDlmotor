@@ -26,6 +26,12 @@ class Company(db.Model):
         self.company_description = company_description
         self.company_contact = company_contact
 
+# MODEL USERTYPE
+class UsersType(db.Model):
+    userstype_id = db.Column(db.Integer, primary_key=True)
+    userstype_name = db.Column(db.String(45))
+    def __init__(self, userstype_name):
+        self.userstype_name = userstype_name
 
 # MODEL GARAGE
 class Garage(db.Model):
@@ -85,6 +91,14 @@ class Categoriesracing(db.Model):
         self.categoriesracing_image = categoriesracing_image
         self.categoriesracing_video = categoriesracing_video
 
+#SCHEMA
+class UserTypesSchema(ma.Schema):
+    class Meta:
+        fields = ('userstype_id', 'userstype_name')
+userType_schema = UserTypesSchema()
+userTypes_schema = UserTypesSchema(many=True)
+
+
 #ROUTES
 #home
 @app.route('/', methods=['GET'])
@@ -106,6 +120,12 @@ def get_company(_id):
     response = jsonify(result)
 
     return response
+
+#user_types
+@app.route('/user_types/<_id>', methods=['GET'])
+def get_userTypes_id(_id):
+    userTypes = UsersType.query.get(_id)
+    return userType_schema.jsonify(userTypes)
 
 #garage
 @app.route('/garage/<_id>', methods=['GET'])
@@ -174,12 +194,7 @@ def get_categoriesracing():
 
 
 
-# # MODEL userType
-# class UsersType(db.Model):
-#     userstype_id = db.Column(db.Integer, primary_key=True)
-#     userstype_name = db.Column(db.String(45))
-#     def __init__(self, userstype_name):
-#         self.userstype_name = userstype_name
+
         
 # # MODEL users
 # class Users(db.Model):
@@ -379,12 +394,7 @@ def get_categoriesracing():
 
 # db.create_all()
 
-# class UserTypesSchema(ma.Schema):
-#     class Meta:
-#         fields = ('userstype_id', 'userstype_name')
-# userType_schema = UserTypesSchema()
-# userTypes_schema = UserTypesSchema(many=True)
-
+# 
 # class UsersSchema(ma.Schema):
 #     class Meta:
 #         fields = ('users_id', 'users_name', 'users_surname', 'users_password', 'users_email', 'users_type_id')
@@ -410,11 +420,6 @@ def get_categoriesracing():
 
 
 
-# ## user_types
-# @app.route('/user_types/<_id>', methods=['GET'])
-# def get_userTypes_id(_id):
-#     userTypes = UsersType.query.get(_id)
-#     return userType_schema.jsonify(userTypes)
 
 # ## USER- INFO by id
 # @app.route('/userInfo/<_id>', methods=['GET'])
