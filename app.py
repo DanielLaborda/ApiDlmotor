@@ -167,6 +167,48 @@ def get_userinfoByid(_id):
     response = jsonify(result)
     return response
 
+# USER- INFO login
+@app.route('/userInfo/<email>/<password>', methods=['GET'])
+def get_userinfo(email, password):    
+    user_email = email
+    user_password = password
+    exist = Users.query.filter(Users.users_email == user_email).all()
+    if (exist):
+        user = Users.query.filter(Users.users_email == user_email).one()
+        if(user):
+            if (user_password == user.users_password):
+                typeU = UsersType.query.get(user.users_type)
+                result = {
+                    "user_id": user.users_id,
+                    "user_name": user.users_name,
+                    "user_surname": user.users_surname,
+                    "user_password": user.users_password,
+                    "user_email": user.users_email,
+                    "userType":[
+                        {
+                            "usertype_id": typeU.userstype_id, 
+                            "usertype_name": typeU.userstype_name
+                        }
+                    ],
+                    "response": "Accepted"        
+                }
+            else:
+                result = {
+                    "response": "Wrong email or password"
+                }
+        else:
+            result = {
+                "response": "Wrong email or password"
+            }
+    else:
+        result = {
+            "response": "Account not Found"
+        }
+ 
+    db.session.commit()
+    response = jsonify(result)
+    return response
+
 #garage
 @app.route('/garage/<_id>', methods=['GET'])
 def get_garage(_id):
@@ -449,48 +491,7 @@ def get_categoriesracing():
 
 
 
-# ## USER- INFO login
-# @app.route('/userInfo/<email>/<password>', methods=['GET'])
-# def get_userinfo(email, password):    
-#     user_email = email
-#     user_password = password
-#     exist = Users.query.filter(Users.users_email == user_email).all()
-#     if (exist):
-#         user = Users.query.filter(Users.users_email == user_email).one()
-#         if(user):
-#             if (user_password == user.users_password):
-#                 typeU = UsersType.query.get(user.users_type)
-#                 result = {
-#                     "user_id": user.users_id,
-#                     "user_name": user.users_name,
-#                     "user_surname": user.users_surname,
-#                     "user_password": user.users_password,
-#                     "user_email": user.users_email,
-#                     "userType":[
-#                         {
-#                             "usertype_id": typeU.userstype_id, 
-#                             "usertype_name": typeU.userstype_name
-#                         }
-#                     ],
-#                     "response": "Accepted"        
-#                 }
-#             else:
-#                 result = {
-#                     "response": "Wrong email or password"
-#                 }
-#         else:
-#             result = {
-#                 "response": "Wrong email or password"
-#             }
 
-#     else:
-#         result = {
-#             "response": "Account not Found"
-#         }
-   
-#     db.session.commit()
-#     response = jsonify(result)
-#     return response
 
 # ## CREATE USER
 # @app.route('/users', methods=['POST'])
