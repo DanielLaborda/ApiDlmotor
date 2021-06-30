@@ -125,13 +125,13 @@ def home():
 @app.route('/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
-    company = Company.query.get(_id)
+    company = Company.query.all()#get(_id)
   
     result = {
         "company_name": company.company_name,
         "company_description": company.company_description,
         "company_contact": company.company_contact,
-        #"company_logo": base64.b64encode(company.company_logo).decode("utf-8") 
+        "company_logo": base64.b64encode(company.company_logo).decode("utf-8") 
     }
     db.session.commit()
     response = jsonify(result)
