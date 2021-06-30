@@ -125,8 +125,12 @@ def home():
 @app.route('/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
-    # company = Company.query.get(_id)
-    
+    company = Company.query.get(_id)
+    if (company):
+        return f'response' +_id
+    else:
+        return f'no response' +_id
+ 
     # result = {
     #     "company_name": company.company_name,
     #     "company_description": company.company_description,
@@ -136,7 +140,7 @@ def get_company():
     # db.session.commit()
     # response = jsonify(result)
 
-    return f'response' +_id
+    
 
 #user_types
 @app.route('/user_types/<_id>', methods=['GET'])
