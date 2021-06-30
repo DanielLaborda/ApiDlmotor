@@ -137,172 +137,172 @@ def get_company():
     return response
     
 
-#user_types
-@app.route('/user_types/<_id>', methods=['GET'])
-def get_userTypes_id(_id):
-    userTypes = UsersType.query.get(_id)
-    return userType_schema.jsonify(userTypes)
+# #user_types
+# @app.route('/user_types/<_id>', methods=['GET'])
+# def get_userTypes_id(_id):
+#     userTypes = UsersType.query.get(_id)
+#     return userType_schema.jsonify(userTypes)
 
-# USER- INFO by id
-@app.route('/userInfo/<_id>', methods=['GET'])
-def get_userinfoByid(_id):    
-    user = Users.query.get(_id)
-    typeU = UsersType.query.get(user.users_type)
-    result = {
-        "user_id": user.users_id,
-        "user_name": user.users_name,
-        "user_surname": user.users_surname,
-        "user_password": user.users_password,
-        "user_email": user.users_email,
-        "userType":[
-            {
-                "usertype_id": typeU.userstype_id, 
-                "usertype_name": typeU.userstype_name
-            }
-        ],
-        "response": "Accepted"        
-    }
+# # USER- INFO by id
+# @app.route('/userInfo/<_id>', methods=['GET'])
+# def get_userinfoByid(_id):    
+#     user = Users.query.get(_id)
+#     typeU = UsersType.query.get(user.users_type)
+#     result = {
+#         "user_id": user.users_id,
+#         "user_name": user.users_name,
+#         "user_surname": user.users_surname,
+#         "user_password": user.users_password,
+#         "user_email": user.users_email,
+#         "userType":[
+#             {
+#                 "usertype_id": typeU.userstype_id, 
+#                 "usertype_name": typeU.userstype_name
+#             }
+#         ],
+#         "response": "Accepted"        
+#     }
 
-    db.session.commit()
-    response = jsonify(result)
-    return response
+#     db.session.commit()
+#     response = jsonify(result)
+#     return response
 
-# USER- INFO login
-@app.route('/userInfo/<email>/<password>', methods=['GET'])
-def get_userinfo(email, password):    
-    user_email = email
-    user_password = password
-    exist = Users.query.filter(Users.users_email == user_email).all()
-    if (exist):
-        user = Users.query.filter(Users.users_email == user_email).one()
-        if(user):
-            if (user_password == user.users_password):
-                typeU = UsersType.query.get(user.users_type)
-                result = {
-                    "user_id": user.users_id,
-                    "user_name": user.users_name,
-                    "user_surname": user.users_surname,
-                    "user_password": user.users_password,
-                    "user_email": user.users_email,
-                    "userType":[
-                        {
-                            "usertype_id": typeU.userstype_id, 
-                            "usertype_name": typeU.userstype_name
-                        }
-                    ],
-                    "response": "Accepted"        
-                }
-            else:
-                result = {
-                    "response": "Wrong email or password"
-                }
-        else:
-            result = {
-                "response": "Wrong email or password"
-            }
-    else:
-        result = {
-            "response": "Account not Found"
-        }
+# # USER- INFO login
+# @app.route('/userInfo/<email>/<password>', methods=['GET'])
+# def get_userinfo(email, password):    
+#     user_email = email
+#     user_password = password
+#     exist = Users.query.filter(Users.users_email == user_email).all()
+#     if (exist):
+#         user = Users.query.filter(Users.users_email == user_email).one()
+#         if(user):
+#             if (user_password == user.users_password):
+#                 typeU = UsersType.query.get(user.users_type)
+#                 result = {
+#                     "user_id": user.users_id,
+#                     "user_name": user.users_name,
+#                     "user_surname": user.users_surname,
+#                     "user_password": user.users_password,
+#                     "user_email": user.users_email,
+#                     "userType":[
+#                         {
+#                             "usertype_id": typeU.userstype_id, 
+#                             "usertype_name": typeU.userstype_name
+#                         }
+#                     ],
+#                     "response": "Accepted"        
+#                 }
+#             else:
+#                 result = {
+#                     "response": "Wrong email or password"
+#                 }
+#         else:
+#             result = {
+#                 "response": "Wrong email or password"
+#             }
+#     else:
+#         result = {
+#             "response": "Account not Found"
+#         }
  
-    db.session.commit()
-    response = jsonify(result)
-    return response
+#     db.session.commit()
+#     response = jsonify(result)
+#     return response
 
-# USER- create
-@app.route('/users', methods=['POST'])
-def create_user():
-    users_name = request.json['users_name']
-    users_surname = request.json['users_surname']
-    users_password = request.json['users_password']
-    users_email = request.json['users_email']
-    users_type = request.json['users_type']
+# # USER- create
+# @app.route('/users', methods=['POST'])
+# def create_user():
+#     users_name = request.json['users_name']
+#     users_surname = request.json['users_surname']
+#     users_password = request.json['users_password']
+#     users_email = request.json['users_email']
+#     users_type = request.json['users_type']
 
-    exist = Users.query.filter(Users.users_email == users_email).all()
-    if (exist):
-        result = {
-            "response": "There is an account with this email!"
-        }
-    else:
-        new_user = Users( users_name, users_surname, users_password, users_email, users_type )
-        db.session.add(new_user)
-        db.session.commit()
+#     exist = Users.query.filter(Users.users_email == users_email).all()
+#     if (exist):
+#         result = {
+#             "response": "There is an account with this email!"
+#         }
+#     else:
+#         new_user = Users( users_name, users_surname, users_password, users_email, users_type )
+#         db.session.add(new_user)
+#         db.session.commit()
 
-        user = Users.query.get(new_user.users_id)
-        typeU = UsersType.query.get(new_user.users_type)
-        result = {
-            "user_id": user.users_id,
-            "user_name": user.users_name,
-            "user_surname": user.users_surname,
-            "user_password": user.users_password,
-            "user_email": user.users_email,
-            "userType":[
-                {
-                    "usertype_id": typeU.userstype_id, 
-                    "usertype_name": typeU.userstype_name
-                }
-            ],
-            "response": "Accepted"        
-        }
+#         user = Users.query.get(new_user.users_id)
+#         typeU = UsersType.query.get(new_user.users_type)
+#         result = {
+#             "user_id": user.users_id,
+#             "user_name": user.users_name,
+#             "user_surname": user.users_surname,
+#             "user_password": user.users_password,
+#             "user_email": user.users_email,
+#             "userType":[
+#                 {
+#                     "usertype_id": typeU.userstype_id, 
+#                     "usertype_name": typeU.userstype_name
+#                 }
+#             ],
+#             "response": "Accepted"        
+#         }
          
-    db.session.commit()
-    return  jsonify(result)
+#     db.session.commit()
+#     return  jsonify(result)
 
-#garage
-@app.route('/garage/<_id>', methods=['GET'])
-def get_garage(_id):
-    garage = Garage.query.get(_id)
-    result = {
-        "garage_name": garage.garage_name,
-        "garage_description": garage.garage_description,
-        "garage_contact": garage.garage_contact,
-        "garage_position": [garage.garage_positionX, garage.garage_positionY],
-        "garage_image":  base64.b64encode(garage.garage_image).decode("utf-8")   
-    }
+# #garage
+# @app.route('/garage/<_id>', methods=['GET'])
+# def get_garage(_id):
+#     garage = Garage.query.get(_id)
+#     result = {
+#         "garage_name": garage.garage_name,
+#         "garage_description": garage.garage_description,
+#         "garage_contact": garage.garage_contact,
+#         "garage_position": [garage.garage_positionX, garage.garage_positionY],
+#         "garage_image":  base64.b64encode(garage.garage_image).decode("utf-8")   
+#     }
     
-    db.session.commit()
-    response = jsonify(result)
-    return response
+#     db.session.commit()
+#     response = jsonify(result)
+#     return response
 
-#racingTeam
-@app.route('/racingTeam/<_id>', methods=['GET'])
-def get_racingTeam(_id):
-    racingTeam = Racingteam.query.get(_id)
-    imagesBanner = Imagesbannerracing.query.filter(Imagesbannerracing.ImagesBannerRacing_racingteam == _id).all()
+# #racingTeam
+# @app.route('/racingTeam/<_id>', methods=['GET'])
+# def get_racingTeam(_id):
+#     racingTeam = Racingteam.query.get(_id)
+#     imagesBanner = Imagesbannerracing.query.filter(Imagesbannerracing.ImagesBannerRacing_racingteam == _id).all()
     
-    resultImages = []
-    for image in imagesBanner:
-        resultImages.append(base64.b64encode(image.ImagesBannerRacing_image).decode("utf-8") )
+#     resultImages = []
+#     for image in imagesBanner:
+#         resultImages.append(base64.b64encode(image.ImagesBannerRacing_image).decode("utf-8") )
     
-    result = {
-        "racingTeam_name": racingTeam.racingteam_name,
-        "racingTeam_slogan": racingTeam.racingteam_slogan,
-        "racingTeam_description": racingTeam.racingteam_description,
-        "racingTeam_description2": racingTeam.racingteam_description2,
-        "racingTeam_video": racingTeam.racingteam_video,
-        "racingTeam_imagesBanner":  resultImages  
-    }
+#     result = {
+#         "racingTeam_name": racingTeam.racingteam_name,
+#         "racingTeam_slogan": racingTeam.racingteam_slogan,
+#         "racingTeam_description": racingTeam.racingteam_description,
+#         "racingTeam_description2": racingTeam.racingteam_description2,
+#         "racingTeam_video": racingTeam.racingteam_video,
+#         "racingTeam_imagesBanner":  resultImages  
+#     }
     
-    db.session.commit()
-    response = jsonify(result)
-    return response   
+#     db.session.commit()
+#     response = jsonify(result)
+#     return response   
 
-#categoriesRacing
-@app.route('/categoriesRacing', methods=['GET'])
-def get_categoriesracing():
-    categoriesracing = Categoriesracing.query.all()
+# #categoriesRacing
+# @app.route('/categoriesRacing', methods=['GET'])
+# def get_categoriesracing():
+#     categoriesracing = Categoriesracing.query.all()
   
-    result = []
-    for category in categoriesracing:
-        result.append({
-            "categoriesracing_name": category.categoriesracing_name,
-            "categoriesracing_image": base64.b64encode(category.categoriesracing_image).decode("utf-8"),
-            "categoriesracing_video": category.categoriesracing_video  
-        })
+#     result = []
+#     for category in categoriesracing:
+#         result.append({
+#             "categoriesracing_name": category.categoriesracing_name,
+#             "categoriesracing_image": base64.b64encode(category.categoriesracing_image).decode("utf-8"),
+#             "categoriesracing_video": category.categoriesracing_video  
+#         })
 
-    db.session.commit()
-    response = jsonify(result)
-    return response
+#     db.session.commit()
+#     response = jsonify(result)
+#     return response
 
 
 
