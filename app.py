@@ -26,93 +26,93 @@ class Company(db.Model):
         self.company_description = company_description
         self.company_contact = company_contact
 
-# MODEL USERTYPE
-class UsersType(db.Model):
-    userstype_id = db.Column(db.Integer, primary_key=True)
-    userstype_name = db.Column(db.String(45))
-    def __init__(self, userstype_name):
-        self.userstype_name = userstype_name
+# # MODEL USERTYPE
+# class UsersType(db.Model):
+#     userstype_id = db.Column(db.Integer, primary_key=True)
+#     userstype_name = db.Column(db.String(45))
+#     def __init__(self, userstype_name):
+#         self.userstype_name = userstype_name
 
-# MODEL USERS
-class Users(db.Model):
-    users_id = db.Column(db.Integer, primary_key=True)
-    users_name = db.Column(db.String(50))
-    users_surname = db.Column(db.String(50))
-    users_password = db.Column(db.String(25))
-    users_email = db.Column(db.String(50))
-    users_type = db.Column(db.Integer)
+# # MODEL USERS
+# class Users(db.Model):
+#     users_id = db.Column(db.Integer, primary_key=True)
+#     users_name = db.Column(db.String(50))
+#     users_surname = db.Column(db.String(50))
+#     users_password = db.Column(db.String(25))
+#     users_email = db.Column(db.String(50))
+#     users_type = db.Column(db.Integer)
 
-    def __init__(self, users_name, users_surname, users_password, users_email, users_type):
-        self.users_name = users_name
-        self.users_surname = users_surname
-        self.users_password = users_password
-        self.users_email = users_email
-        self.users_type = users_type
+#     def __init__(self, users_name, users_surname, users_password, users_email, users_type):
+#         self.users_name = users_name
+#         self.users_surname = users_surname
+#         self.users_password = users_password
+#         self.users_email = users_email
+#         self.users_type = users_type
 
-# MODEL GARAGE
-class Garage(db.Model):
-    garage_id = db.Column(db.Integer, primary_key=True)
-    garage_name = db.Column(db.String(45))
-    garage_description = db.Column(db.Text)
-    garage_contact = db.Column(db.String(11))
-    garage_positionX = db.Column(db.FLOAT)
-    garage_positionY = db.Column(db.FLOAT)
-    garage_image = db.Column(db.BLOB)
+# # MODEL GARAGE
+# class Garage(db.Model):
+#     garage_id = db.Column(db.Integer, primary_key=True)
+#     garage_name = db.Column(db.String(45))
+#     garage_description = db.Column(db.Text)
+#     garage_contact = db.Column(db.String(11))
+#     garage_positionX = db.Column(db.FLOAT)
+#     garage_positionY = db.Column(db.FLOAT)
+#     garage_image = db.Column(db.BLOB)
     
-    def __init__(self,  garage_name, garage_description, garage_contact, garage_positionX, garage_positionY, garage_image):
-        self.garage_name = garage_name
-        self.garage_description = garage_description
-        self.garage_contact = garage_contact
-        self.garage_positionX = garage_positionX
-        self.garage_positionY = garage_positionY
-        self.garage_image = garage_image
+#     def __init__(self,  garage_name, garage_description, garage_contact, garage_positionX, garage_positionY, garage_image):
+#         self.garage_name = garage_name
+#         self.garage_description = garage_description
+#         self.garage_contact = garage_contact
+#         self.garage_positionX = garage_positionX
+#         self.garage_positionY = garage_positionY
+#         self.garage_image = garage_image
 
-# MODEL RacingTeam
-class Racingteam(db.Model):
-    racingteam_id = db.Column(db.Integer, primary_key=True)
-    racingteam_name = db.Column(db.String(50))
-    racingteam_slogan = db.Column(db.String(100))
-    racingteam_description = db.Column(db.Text)
-    racingteam_description2 = db.Column(db.Text)
-    racingteam_video = db.Column(db.String(100))
+# # MODEL RacingTeam
+# class Racingteam(db.Model):
+#     racingteam_id = db.Column(db.Integer, primary_key=True)
+#     racingteam_name = db.Column(db.String(50))
+#     racingteam_slogan = db.Column(db.String(100))
+#     racingteam_description = db.Column(db.Text)
+#     racingteam_description2 = db.Column(db.Text)
+#     racingteam_video = db.Column(db.String(100))
     
-    def __init__(self,  racingteam_name, racingteam_slogan, racingteam_description, racingteam_description2, racingteam_video):
-        self.racingteam_name = racingteam_name
-        self.racingteam_slogan = racingteam_slogan
-        self.racingteam_description = racingteam_description
-        self.racingteam_description2 = racingteam_description2
-        self.racingteam_video = racingteam_video
+#     def __init__(self,  racingteam_name, racingteam_slogan, racingteam_description, racingteam_description2, racingteam_video):
+#         self.racingteam_name = racingteam_name
+#         self.racingteam_slogan = racingteam_slogan
+#         self.racingteam_description = racingteam_description
+#         self.racingteam_description2 = racingteam_description2
+#         self.racingteam_video = racingteam_video
 
-# MODEL ImagesBannerRacing
-class Imagesbannerracing(db.Model):
-    ImagesBannerRacing_id = db.Column(db.Integer, primary_key=True)
-    ImagesBannerRacing_image = db.Column(db.BLOB)
-    ImagesBannerRacing_racingteam = db.Column(db.Integer)
+# # MODEL ImagesBannerRacing
+# class Imagesbannerracing(db.Model):
+#     ImagesBannerRacing_id = db.Column(db.Integer, primary_key=True)
+#     ImagesBannerRacing_image = db.Column(db.BLOB)
+#     ImagesBannerRacing_racingteam = db.Column(db.Integer)
 
-    def __init__(self,  ImagesBannerRacing_id, ImagesBannerRacing_image, ImagesBannerRacing_racingteam):
-        self.ImagesBannerRacing_id = ImagesBannerRacing_id
-        self.ImagesBannerRacing_image = ImagesBannerRacing_image
-        self.ImagesBannerRacing_racingteam = ImagesBannerRacing_racingteam
+#     def __init__(self,  ImagesBannerRacing_id, ImagesBannerRacing_image, ImagesBannerRacing_racingteam):
+#         self.ImagesBannerRacing_id = ImagesBannerRacing_id
+#         self.ImagesBannerRacing_image = ImagesBannerRacing_image
+#         self.ImagesBannerRacing_racingteam = ImagesBannerRacing_racingteam
 
-# MODEL Categoriesracing
-class Categoriesracing(db.Model):
-    categoriesracing_id = db.Column(db.Integer, primary_key=True)
-    categoriesracing_name = db.Column(db.String(50))
-    categoriesracing_image = db.Column(db.BLOB)
-    categoriesracing_video = db.Column(db.String(100))
+# # MODEL Categoriesracing
+# class Categoriesracing(db.Model):
+#     categoriesracing_id = db.Column(db.Integer, primary_key=True)
+#     categoriesracing_name = db.Column(db.String(50))
+#     categoriesracing_image = db.Column(db.BLOB)
+#     categoriesracing_video = db.Column(db.String(100))
 
-    def __init__(self,  categoriesracing_id, categoriesracing_name, categoriesracing_image, categoriesracing_video):
-        self.categoriesracing_id = categoriesracing_id
-        self.categoriesracing_name = categoriesracing_name
-        self.categoriesracing_image = categoriesracing_image
-        self.categoriesracing_video = categoriesracing_video
+#     def __init__(self,  categoriesracing_id, categoriesracing_name, categoriesracing_image, categoriesracing_video):
+#         self.categoriesracing_id = categoriesracing_id
+#         self.categoriesracing_name = categoriesracing_name
+#         self.categoriesracing_image = categoriesracing_image
+#         self.categoriesracing_video = categoriesracing_video
 
-#SCHEMA
-class UserTypesSchema(ma.Schema):
-    class Meta:
-        fields = ('userstype_id', 'userstype_name')
-userType_schema = UserTypesSchema()
-userTypes_schema = UserTypesSchema(many=True)
+# #SCHEMA
+# class UserTypesSchema(ma.Schema):
+#     class Meta:
+#         fields = ('userstype_id', 'userstype_name')
+# userType_schema = UserTypesSchema()
+# userTypes_schema = UserTypesSchema(many=True)
 
 
 #ROUTES
