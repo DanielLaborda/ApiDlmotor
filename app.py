@@ -1,13 +1,15 @@
 import flask
 from flask import request, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
 import base64
 
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
 # #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
@@ -124,13 +126,14 @@ def home():
 @app.route('/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
+
     company = Company.query.get(_id)
   
     result = {
         "company_name": company.company_name,
         "company_description": company.company_description,
         "company_contact": company.company_contact,
-        "company_logo": ' base64.b64encode(company.company_logo).decode("utf-8")   '
+        "company_logo": base64.b64encode(company.company_logo).decode("utf-8") 
     }
     db.session.commit()
     response = jsonify(result)
