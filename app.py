@@ -1,7 +1,7 @@
 import flask
 from flask import request, jsonify
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from datetime import datetime as dt
 import base64
 
@@ -1053,6 +1053,6 @@ def get_company():
 
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
     
