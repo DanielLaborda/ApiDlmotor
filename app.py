@@ -7,7 +7,7 @@ import base64
 
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot@db4free.net/dlmotor'
-# #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -126,20 +126,16 @@ def home():
 def get_company():
     _id = request.args['id']
     company = Company.query.get(_id)
-    if (company):
-        return f'response' +_id
-    else:
-        return f'no response' +_id
- 
-    # result = {
-    #     "company_name": company.company_name,
-    #     "company_description": company.company_description,
-    #     "company_contact": company.company_contact,
-    #     "company_logo":  base64.b64encode(company.company_logo).decode("utf-8")   
-    # }
-    # db.session.commit()
-    # response = jsonify(result)
-
+  
+    result = {
+        "company_name": company.company_name,
+        "company_description": company.company_description,
+        "company_contact": company.company_contact,
+        "company_logo":  base64.b64encode(company.company_logo).decode("utf-8")   
+    }
+    db.session.commit()
+    response = jsonify(result)
+    return response
     
 
 #user_types
