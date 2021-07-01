@@ -101,10 +101,12 @@ class UserTypesSchema(ma.Schema):
 userType_schema = UserTypesSchema()
 userTypes_schema = UserTypesSchema(many=True)
 #ROUTES
+
 #home
 @app.route('/', methods=['GET'])
 def home():
     return f'Its working'
+
 #company
 @app.route('/company/<_id>', methods=['GET'])
 def get_company(_id):
@@ -119,11 +121,13 @@ def get_company(_id):
     db.session.commit()
     response = jsonify(result)
     return response
+
 #user_types
 @app.route('/user_types/<_id>', methods=['GET'])
 def get_userTypes_id(_id):
     userTypes = UsersType.query.get(_id)
     return userType_schema.jsonify(userTypes)
+
 # USER- INFO by id
 @app.route('/userInfo/<_id>', methods=['GET'])
 def get_userinfoByid(_id):    
@@ -146,6 +150,7 @@ def get_userinfoByid(_id):
     db.session.commit()
     response = jsonify(result)
     return response
+    
 # USER- INFO login
 @app.route('/userInfo/<email>/<password>', methods=['GET'])
 def get_userinfo(email, password):    
