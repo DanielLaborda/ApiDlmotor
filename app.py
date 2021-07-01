@@ -51,4 +51,4 @@ def get_company():
     # }
     # db.session.commit()
     # response = jsonify(result)
-    return f'response' + db
+    return f'response' + app
