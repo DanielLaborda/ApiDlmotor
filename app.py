@@ -35,11 +35,11 @@ def home():
 @app.route('/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
-    company = Company.query.get(_id)
-    result = {
-        "company_name": company.company_name
-    }
-    db.session.commit()
+    # company = Company.query.get(_id)
+    # result = {
+    #     "company_name": company.company_name
+    # }
+    # db.session.commit()
     # company = Company.query.get(_id)
   
     # result = {
@@ -50,4 +50,4 @@ def get_company():
     # }
     # db.session.commit()
     # response = jsonify(result)
-    return f'response' + _id
+    return f'response' + db
