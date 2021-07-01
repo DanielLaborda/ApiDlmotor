@@ -35,6 +35,7 @@ def home():
 @app.route('/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
+    company = Company.query.get(_id)
     # company = Company.query.get(_id)
   
     # result = {
