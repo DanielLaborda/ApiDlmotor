@@ -210,56 +210,17 @@ def get_company():
 #     response = jsonify(result)
 #     return response
 
-# # USER- create
-# @app.route('/users', methods=['POST'])
-# def create_user():
-#     users_name = request.json['users_name']
-#     users_surname = request.json['users_surname']
-#     users_password = request.json['users_password']
-#     users_email = request.json['users_email']
-#     users_type = request.json['users_type']
-
-#     exist = Users.query.filter(Users.users_email == users_email).all()
-#     if (exist):
-#         result = {
-#             "response": "There is an account with this email!"
-#         }
-#     else:
-#         new_user = Users( users_name, users_surname, users_password, users_email, users_type )
-#         db.session.add(new_user)
-#         db.session.commit()
-
-#         user = Users.query.get(new_user.users_id)
-#         typeU = UsersType.query.get(new_user.users_type)
-#         result = {
-#             "user_id": user.users_id,
-#             "user_name": user.users_name,
-#             "user_surname": user.users_surname,
-#             "user_password": user.users_password,
-#             "user_email": user.users_email,
-#             "userType":[
-#                 {
-#                     "usertype_id": typeU.userstype_id, 
-#                     "usertype_name": typeU.userstype_name
-#                 }
-#             ],
-#             "response": "Accepted"        
-#         }
-         
-#     db.session.commit()
-#     return  jsonify(result)
-
-# #garage
-# @app.route('/garage/<_id>', methods=['GET'])
-# def get_garage(_id):
-#     garage = Garage.query.get(_id)
-#     result = {
-#         "garage_name": garage.garage_name,
-#         "garage_description": garage.garage_description,
-#         "garage_contact": garage.garage_contact,
-#         "garage_position": [garage.garage_positionX, garage.garage_positionY],
-#         "garage_image":  base64.b64encode(garage.garage_image).decode("utf-8")   
-#     }
+#garage
+@app.route('/garage/<_id>', methods=['GET'])
+def get_garage(_id):
+    garage = Garage.query.get(_id)
+    result = {
+        "garage_name": garage.garage_name,
+        "garage_description": garage.garage_description,
+        "garage_contact": garage.garage_contact,
+        "garage_position": [garage.garage_positionX, garage.garage_positionY],
+        "garage_image":  base64.b64encode(garage.garage_image).decode("utf-8")   
+    }
     
 #     db.session.commit()
 #     response = jsonify(result)
@@ -533,7 +494,46 @@ def get_company():
 
 
 
+# ## CREATE USER
+# @app.route('/users', methods=['POST'])
+# def create_user():
+#     users_name = request.json['users_name']
+#     users_surname = request.json['users_surname']
+#     users_password = request.json['users_password']
+#     users_email = request.json['users_email']
+#     users_type = request.json['users_type']
 
+#     exist = Users.query.filter(Users.users_email == users_email).all()
+#     if (exist):
+#         result = {
+#             "response": "There is an account with this email!"
+#         }
+#     else:
+#         new_user = Users( users_name, users_surname, users_password, users_email, users_type )
+#         db.session.add(new_user)
+#         db.session.commit()
+
+#         user = Users.query.get(new_user.users_id)
+#         typeU = UsersType.query.get(new_user.users_type)
+#         print(typeU.userstype_id)
+#         result = {
+#             "user_id": user.users_id,
+#             "user_name": user.users_name,
+#             "user_surname": user.users_surname,
+#             "user_password": user.users_password,
+#             "user_email": user.users_email,
+#             "userType":[
+#                 {
+#                     "usertype_id": typeU.userstype_id, 
+#                     "usertype_name": typeU.userstype_name
+#                 }
+#             ],
+#             "response": "Accepted"        
+#         }
+    
+       
+#     db.session.commit()
+#     return  jsonify(result)
 
 # ## categories
 # @app.route('/categories', methods=['GET'])
