@@ -18,7 +18,8 @@ class Company(db.Model):
     company_description = db.Column(db.Text)
     company_contact = db.Column(db.String(11))
     
-    def __init__(self,  company_name, company_logo, company_description, company_contact):
+    def __init__(self, company_id, company_name, company_logo, company_description, company_contact):
+        self.company_id = company_id
         self.company_name = company_name
         self.company_logo = company_logo
         self.company_description = company_description
