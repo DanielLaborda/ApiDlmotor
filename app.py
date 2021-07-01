@@ -36,6 +36,10 @@ def home():
 def get_company():
     _id = request.args['id']
     company = Company.query.get(_id)
+    result = {
+        "company_name": company.company_name
+    }
+    db.session.commit()
     # company = Company.query.get(_id)
   
     # result = {
