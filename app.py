@@ -162,7 +162,7 @@ def get_userinfo():
     return response
 
 # USER- create
-@app.route('/users', methods=['POST'])
+@app.route('/createUsers/', methods=['POST'])
 def create_user():
     users_name = request.json['users_name']
     users_surname = request.json['users_surname']
