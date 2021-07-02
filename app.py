@@ -42,7 +42,8 @@ class Users(db.Model):
     users_email = db.Column(db.String(50))
     users_type = db.Column(db.Integer)
 
-    def __init__(self, users_name, users_surname, users_password, users_email, users_type):
+    def __init__(self, users_id, users_name, users_surname, users_password, users_email, users_type):
+        self.users_id = users_id
         self.users_name = users_name
         self.users_surname = users_surname
         self.users_password = users_password
@@ -92,23 +93,23 @@ def get_userTypes_id():
 
 # USER- INFO by id
 @app.route('/userInfoById/', methods=['GET'])
-def get_userinfoByid(_id):
+def get_userinfoByid():
     _id = request.args['id']    
     user = Users.query.get(_id)
 
-    #typeU = UsersType.query.get(user.users_type)
+    typeU = UsersType.query.get(user.users_type)
     result = {
         "user_id": user.users_id,
         "user_name": user.users_name,
         "user_surname": user.users_surname,
         "user_password": user.users_password,
         "user_email": user.users_email,
-        #"userType":[
-        #     {
-        #         "usertype_id": typeU.userstype_id, 
-        #         "usertype_name": typeU.userstype_name
-        #     }
-        # ],
+        "userType":[
+            {
+                "usertype_id": typeU.userstype_id, 
+                "usertype_name": typeU.userstype_name
+            }
+        ],
         "response": "Accepted"        
     }
 
