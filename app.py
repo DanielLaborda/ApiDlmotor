@@ -66,8 +66,9 @@ def get_company():
     return response
 
 #user_types
-@app.route('/user_types/<_id>', methods=['GET'])
-def get_userTypes_id(_id):
+@app.route('/user_types/', methods=['GET'])
+def get_userTypes_id():
+    _id = request.args['id']
     userTypes = UsersType.query.get(_id)
     response = userType_schema.jsonify(userTypes)
     response.headers["Access-Control-Allow-Origin"] = "*"
