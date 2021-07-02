@@ -95,19 +95,20 @@ def get_userTypes_id():
 def get_userinfoByid(_id):
     _id = request.args['id']    
     user = Users.query.get(_id)
-    typeU = UsersType.query.get(user.users_type)
+
+    #typeU = UsersType.query.get(user.users_type)
     result = {
         "user_id": user.users_id,
         "user_name": user.users_name,
         "user_surname": user.users_surname,
         "user_password": user.users_password,
         "user_email": user.users_email,
-        "userType":[
-            {
-                "usertype_id": typeU.userstype_id, 
-                "usertype_name": typeU.userstype_name
-            }
-        ],
+        #"userType":[
+        #     {
+        #         "usertype_id": typeU.userstype_id, 
+        #         "usertype_name": typeU.userstype_name
+        #     }
+        # ],
         "response": "Accepted"        
     }
 
