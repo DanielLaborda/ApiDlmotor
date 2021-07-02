@@ -91,8 +91,9 @@ def get_userTypes_id():
     return response
 
 # USER- INFO by id
-@app.route('/userInfo/<_id>', methods=['GET'])
-def get_userinfoByid(_id):    
+@app.route('/userInfoById/', methods=['GET'])
+def get_userinfoByid(_id):
+    _id = request.args['id']    
     user = Users.query.get(_id)
     typeU = UsersType.query.get(user.users_type)
     result = {
@@ -116,10 +117,10 @@ def get_userinfoByid(_id):
     return response
 
 # USER- INFO login
-@app.route('/userInfo/<email>/<password>', methods=['GET'])
-def get_userinfo(email, password):    
-    user_email = email
-    user_password = password
+@app.route('/userInfo/', methods=['GET'])
+def get_userinfo():    
+    user_email = request.args['email'] 
+    user_password =  request.args['password'] 
     exist = Users.query.filter(Users.users_email == user_email).all()
     if (exist):
         user = Users.query.filter(Users.users_email == user_email).one()
