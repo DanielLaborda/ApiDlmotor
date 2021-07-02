@@ -33,6 +33,22 @@ class UsersType(db.Model):
     def __init__(self, userstype_name):
         self.userstype_name = userstype_name
 
+# MODEL USERS
+class Users(db.Model):
+    users_id = db.Column(db.Integer, primary_key=True)
+    users_name = db.Column(db.String(50))
+    users_surname = db.Column(db.String(50))
+    users_password = db.Column(db.String(25))
+    users_email = db.Column(db.String(50))
+    users_type = db.Column(db.Integer)
+
+    def __init__(self, users_name, users_surname, users_password, users_email, users_type):
+        self.users_name = users_name
+        self.users_surname = users_surname
+        self.users_password = users_password
+        self.users_email = users_email
+        self.users_type = users_type
+
 #SCHEMA
 class UserTypesSchema(ma.Schema):
     class Meta:
@@ -73,3 +89,112 @@ def get_userTypes_id():
     response = userType_schema.jsonify(userTypes)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
+# USER- INFO by id
+@app.route('/userInfo/<_id>', methods=['GET'])
+def get_userinfoByid(_id):    
+    user = Users.query.get(_id)
+    typeU = UsersType.query.get(user.users_type)
+    result = {
+        "user_id": user.users_id,
+        "user_name": user.users_name,
+        "user_surname": user.users_surname,
+        "user_password": user.users_password,
+        "user_email": user.users_email,
+        "userType":[
+            {
+                "usertype_id": typeU.userstype_id, 
+                "usertype_name": typeU.userstype_name
+            }
+        ],
+        "response": "Accepted"        
+    }
+
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+# USER- INFO login
+@app.route('/userInfo/<email>/<password>', methods=['GET'])
+def get_userinfo(email, password):    
+    user_email = email
+    user_password = password
+    exist = Users.query.filter(Users.users_email == user_email).all()
+    if (exist):
+        user = Users.query.filter(Users.users_email == user_email).one()
+        if(user):
+            if (user_password == user.users_password):
+                typeU = UsersType.query.get(user.users_type)
+                result = {
+                    "user_id": user.users_id,
+                    "user_name": user.users_name,
+                    "user_surname": user.users_surname,
+                    "user_password": user.users_password,
+                    "user_email": user.users_email,
+                    "userType":[
+                        {
+                            "usertype_id": typeU.userstype_id, 
+                            "usertype_name": typeU.userstype_name
+                        }
+                    ],
+                    "response": "Accepted"        
+                }
+            else:
+                result = {
+                    "response": "Wrong email or password"
+                }
+        else:
+            result = {
+                "response": "Wrong email or password"
+            }
+    else:
+        result = {
+            "response": "Account not Found"
+        }
+
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+# USER- create
+@app.route('/users', methods=['POST'])
+def create_user():
+    users_name = request.json['users_name']
+    users_surname = request.json['users_surname']
+    users_password = request.json['users_password']
+    users_email = request.json['users_email']
+    users_type = request.json['users_type']
+
+    exist = Users.query.filter(Users.users_email == users_email).all()
+    if (exist):
+        result = {
+            "response": "There is an account with this email!"
+        }
+    else:
+        new_user = Users( users_name, users_surname, users_password, users_email, users_type )
+        db.session.add(new_user)
+        db.session.commit()
+
+        user = Users.query.get(new_user.users_id)
+        typeU = UsersType.query.get(new_user.users_type)
+        result = {
+            "user_id": user.users_id,
+            "user_name": user.users_name,
+            "user_surname": user.users_surname,
+            "user_password": user.users_password,
+            "user_email": user.users_email,
+            "userType":[
+                {
+                    "usertype_id": typeU.userstype_id, 
+                    "usertype_name": typeU.userstype_name
+                }
+            ],
+            "response": "Accepted"        
+        }
+         
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return  response
