@@ -47,4 +47,5 @@ def get_company():
     }
     db.session.commit()
     response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return response
