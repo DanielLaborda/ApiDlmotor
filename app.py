@@ -10,6 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+
 # MODEL COMPANY
 class Company(db.Model):
     company_id = db.Column(db.Integer, primary_key=True)
@@ -24,6 +25,20 @@ class Company(db.Model):
         self.company_logo = company_logo
         self.company_description = company_description
         self.company_contact = company_contact
+
+# MODEL USERTYPE
+class UsersType(db.Model):
+    userstype_id = db.Column(db.Integer, primary_key=True)
+    userstype_name = db.Column(db.String(45))
+    def __init__(self, userstype_name):
+        self.userstype_name = userstype_name
+
+#SCHEMA
+class UserTypesSchema(ma.Schema):
+    class Meta:
+        fields = ('userstype_id', 'userstype_name')
+userType_schema = UserTypesSchema()
+userTypes_schema = UserTypesSchema(many=True)
 
 #ROUTES
 
@@ -47,5 +62,13 @@ def get_company():
     }
     db.session.commit()
     response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+#user_types
+@app.route('/user_types/<_id>', methods=['GET'])
+def get_userTypes_id(_id):
+    userTypes = UsersType.query.get(_id)
+    response = userType_schema.jsonify(userTypes)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
