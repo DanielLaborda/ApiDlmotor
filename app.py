@@ -186,7 +186,7 @@ def create_user():
         db.session.add(new_user)
         db.session.commit()
 
-        user = Users.query.get(new_user.users_id)
+        user = Users.query.filter(Users.users_email == users_email).first()
         typeU = UsersType.query.get(new_user.users_type)
         db.session.commit()
         result = {
