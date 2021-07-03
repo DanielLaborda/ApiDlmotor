@@ -42,8 +42,7 @@ class Users(db.Model):
     users_email = db.Column(db.String(50))
     users_type = db.Column(db.Integer)
 
-    def __init__(self, users_id, users_name, users_surname, users_password, users_email, users_type):
-        self.users_id = users_id
+    def __init__(self,  users_name, users_surname, users_password, users_email, users_type):
         self.users_name = users_name
         self.users_surname = users_surname
         self.users_password = users_password
