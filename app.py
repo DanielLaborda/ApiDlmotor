@@ -163,6 +163,7 @@ def get_userinfo():
 
 # USER- create
 @app.route('/createUsers/', methods=['POST'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def create_user():
     users_name = request.json['users_name']
     users_surname = request.json['users_surname']
@@ -199,9 +200,5 @@ def create_user():
          
     db.session.commit()
     response = jsonify(result)
-    # response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return  response
