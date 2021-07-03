@@ -177,7 +177,15 @@ def create_user():
         "users_email": users_email,
         "users_type": users_type,
     }
-    # exist = Users.query.filter(Users.users_email == users_email).all()
+    exist = Users.query.filter(Users.users_email == users_email).all()
+    if (exist):
+        result = {
+            "response": "existe"
+        }
+    else:
+        result = {
+            "response": "no existe"
+        }
     # if (exist):
     #     result = {
     #         "response": "There is an account with this email!"
