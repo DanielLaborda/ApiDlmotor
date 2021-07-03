@@ -180,15 +180,20 @@ def create_user():
     exist = Users.query.filter(Users.users_email == users_email).all()
     if (exist):
         result = {
-            "response": "existe"
+            "response": "There is an account with this email!"
         }
     else:
+        new_user = Users( users_name, users_surname, users_password, users_email, users_type )
+        db.session.add(new_user)
+        db.session.commit()
+
         result = {
-            "response": "no existe"
+            "response": "creado"
         }
+
     # if (exist):
     #     result = {
-    #         "response": "There is an account with this email!"
+    #         
     #     }
     # else:
     #     new_user = Users( users_name, users_surname, users_password, users_email, users_type )
