@@ -183,11 +183,10 @@ def create_user():
         }
     else:
         new_user = Users( users_name, users_surname, users_password, users_email, users_type )
-        # db.session.add(new_user)
+        db.session.add(new_user)
         db.session.commit()
 
         result = {
-            "new_user": new_user,
             "response": "creado"
         }
 
