@@ -163,17 +163,11 @@ def get_userinfo():
 # USER- create
 @app.route('/createUsers/', methods=['POST'])
 def create_user():
-    # users_name = request.json['users_name']
-    # users_surname = request.json['users_surname']
-    # users_password = request.json['users_password']
-    # users_email = request.json['users_email']
-    # users_type = request.json['users_type']
-
-    users_name = request.args['users_name']
-    users_surname = request.args['users_surname']
-    users_password = request.args['users_password']
-    users_email = request.args['users_email']
-    users_type = request.args['users_type']
+    users_name = request.json['users_name']
+    users_surname = request.json['users_surname']
+    users_password = request.json['users_password']
+    users_email = request.json['users_email']
+    users_type = request.json['users_type']
 
     result ={
         "users_name": users_name, 
