@@ -309,3 +309,21 @@ def get_racingTeam():
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response   
+
+#categoriesRacing
+@app.route('/categoriesRacing', methods=['GET'])
+def get_categoriesracing():
+    categoriesracing = Categoriesracing.query.all()
+  
+    result = []
+    for category in categoriesracing:
+        result.append({
+            "categoriesracing_name": category.categoriesracing_name,
+            "categoriesracing_image": base64.b64encode(category.categoriesracing_image).decode("utf-8"),
+            "categoriesracing_video": category.categoriesracing_video  
+        })
+
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
