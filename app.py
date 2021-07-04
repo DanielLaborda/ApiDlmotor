@@ -433,45 +433,59 @@ def get_vehicles():
                 "vehicleimage_id": image.imagesvehicles_id,
                 "vehicleimage_image": base64.b64encode(image.imagesvehicles_image).decode("utf-8")
             })
-
-        versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == vehicle.vehicles_id).all()
-        versionsVehicles = []
-        for version in versions:
-            version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
-            versionsVehicles.append({
-                'versionsVehicles_id': version.versionsvehicles_id,
-                'versionsvehicles_name': version.versionsvehicles_name,
-                'versionsvehicles_image': base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
-                'versionsvehicles_baseprice': version.versionsvehicles_baseprice,
-                'versionsvehicles_components': version_list,
-                'versionsvehicles_vehicleid': version.versionsvehicles_vehicleid
-            }) 
+        result.append({
+            "vehicles_id": vehicle.vehicles_id,
+            "vehicles_name": vehicle.vehicles_name,
+            "vehicles_banner": base64.b64encode(vehicle.vehicles_banner).decode("utf-8"),
+            "vehicles_image_category": base64.b64encode(vehicle.vehicles_image_category).decode("utf-8"),
+            "vehicles_category": vehicle.vehicles_category,
+            "vehicles_slogan": vehicle.vehicles_slogan,
+            "vehicles_description": vehicle.vehicles_description,
+            "vehicles_warranty": vehicle.vehicles_warranty
+            #         "vehicles_images": imagesVehicles,
+            #         "vehicles_version": versionsVehicles,
+            #         "vehicles_colors": colorsVehicles,
+            #         "vehicles_interiors": interiorsVehicles,
+            #         "vehicles_rims": rimsVehicles
+        })
+        # versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == vehicle.vehicles_id).all()
+        # versionsVehicles = []
+        # for version in versions:
+        #     version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
+        #     versionsVehicles.append({
+        #         'versionsVehicles_id': version.versionsvehicles_id,
+        #         'versionsvehicles_name': version.versionsvehicles_name,
+        #         'versionsvehicles_image': base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
+        #         'versionsvehicles_baseprice': version.versionsvehicles_baseprice,
+        #         'versionsvehicles_components': version_list,
+        #         'versionsvehicles_vehicleid': version.versionsvehicles_vehicleid
+        #     }) 
         
     
     #     
 
-        colors = Colorsvehicles.query.filter(Colorsvehicles.colorsvehicles_vehicleid == vehicle.vehicles_id).all()
-        colorsVehicles = []
-        for color in colors:
-            colorsVehicles.append({
-                'colors_id': color.colorsvehicles_id,
-                'colors_name': color.colorsvehicles_name,
-                'colors_color': base64.b64encode(color.colorsvehicles_color).decode("utf-8"),
-                'colors_image': base64.b64encode(color.colorsvehicles_imgcolor).decode("utf-8"),
-                'colors_price': color.colorsvehicles_price,
-            })
+        # colors = Colorsvehicles.query.filter(Colorsvehicles.colorsvehicles_vehicleid == vehicle.vehicles_id).all()
+        # colorsVehicles = []
+        # for color in colors:
+        #     colorsVehicles.append({
+        #         'colors_id': color.colorsvehicles_id,
+        #         'colors_name': color.colorsvehicles_name,
+        #         'colors_color': base64.b64encode(color.colorsvehicles_color).decode("utf-8"),
+        #         'colors_image': base64.b64encode(color.colorsvehicles_imgcolor).decode("utf-8"),
+        #         'colors_price': color.colorsvehicles_price,
+        #     })
 
-        interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == vehicle.vehicles_id).all()
-        interiorsVehicles = []
-        for interior in interiors:
-            interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
-            interiorsVehicles.append({
-                'interior_id': interior.interiorsvehicles_id,
-                'interior_name': interior.interiorsvehicles_name,
-                'interior_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
-                'interior_basePrice': interior.interiorsvehicles_baseprice,
-                'interior_components': interiors_components
-            })
+        # interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == vehicle.vehicles_id).all()
+        # interiorsVehicles = []
+        # for interior in interiors:
+        #     interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
+        #     interiorsVehicles.append({
+        #         'interior_id': interior.interiorsvehicles_id,
+        #         'interior_name': interior.interiorsvehicles_name,
+        #         'interior_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
+        #         'interior_basePrice': interior.interiorsvehicles_baseprice,
+        #         'interior_components': interiors_components
+        #     })
 
 
     #     rims = Rimsvehicles.query.filter(Rimsvehicles.rimsvehicles_vehicleid == vehicle.vehicles_id).all()
@@ -587,3 +601,9 @@ def get_categoriesracing():
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    
