@@ -441,8 +441,8 @@ def get_vehicles():
             "vehicles_category": vehicle.vehicles_category,
             "vehicles_slogan": vehicle.vehicles_slogan,
             "vehicles_description": vehicle.vehicles_description,
-            "vehicles_warranty": vehicle.vehicles_warranty
-            #         "vehicles_images": imagesVehicles,
+            "vehicles_warranty": vehicle.vehicles_warranty,
+            "vehicles_images": imagesVehicles
             #         "vehicles_version": versionsVehicles,
             #         "vehicles_colors": colorsVehicles,
             #         "vehicles_interiors": interiorsVehicles,
