@@ -417,7 +417,7 @@ def get_categories():
     return response
 
 #vehicles
-@app.route('/vehicles', methods=['GET'])
+@app.route('/vehicles/', methods=['GET'])
 def get_vehicles():
     vehicles = Vehicles.query.all()
     result = []
@@ -434,13 +434,13 @@ def get_vehicles():
         versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == vehicle.vehicles_id).all()
         versionsVehicles = []
         for version in versions:
-            version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
+            # version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
             versionsVehicles.append({
                 'versionsVehicles_id': version.versionsvehicles_id,
                 'versionsvehicles_name': version.versionsvehicles_name,
                 'versionsvehicles_image': base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
                 'versionsvehicles_baseprice': version.versionsvehicles_baseprice,
-                'versionsvehicles_components': version_list,
+                'versionsvehicles_components': "version_list",
                 'versionsvehicles_vehicleid': version.versionsvehicles_vehicleid
             }) 
 
@@ -458,13 +458,13 @@ def get_vehicles():
         interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == vehicle.vehicles_id).all()
         interiorsVehicles = []
         for interior in interiors:
-            interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
+            # interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
             interiorsVehicles.append({
                 'interior_id': interior.interiorsvehicles_id,
                 'interior_name': interior.interiorsvehicles_name,
                 'interior_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
                 'interior_basePrice': interior.interiorsvehicles_baseprice,
-                'interior_components': interiors_components
+                'interior_components': "interiors_components"
             })
 
 
@@ -501,25 +501,25 @@ def get_vehicles():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
-@app.route('/complementversion/<_id>', methods=['GET'])
-def get_complementsversion_byversionId(_id):
-    complementsversions = Complementsversions.query.filter(Complementsversions.complementsversions_versionsid == _id).all()
-    result = []
-    for component in complementsversions:
-        result.append(component.complementsversions_name)
+# @app.route('/complementversion/<_id>', methods=['GET'])
+# def get_complementsversion_byversionId(_id):
+#     complementsversions = Complementsversions.query.filter(Complementsversions.complementsversions_versionsid == _id).all()
+#     result = []
+#     for component in complementsversions:
+#         result.append(component.complementsversions_name)
 
-    db.session.commit()
-    return result
+#     db.session.commit()
+#     return result
 
-@app.route('/colorsInteriors/<_id>', methods=['GET'])
-def get_componentInteriors_byvehicle(_id):
-    comonentsInterior = Complementsinteriors.query.filter(Complementsinteriors.complementsinteriors_interiorid == _id).all()
-    result = []
-    for component in comonentsInterior:
-        result.append(component.complementsinteriors_name)
+# @app.route('/colorsInteriors/<_id>', methods=['GET'])
+# def get_componentInteriors_byvehicle(_id):
+#     comonentsInterior = Complementsinteriors.query.filter(Complementsinteriors.complementsinteriors_interiorid == _id).all()
+#     result = []
+#     for component in comonentsInterior:
+#         result.append(component.complementsinteriors_name)
 
-    db.session.commit()
-    return result
+#     db.session.commit()
+#     return result
 
 #garage
 @app.route('/garage/', methods=['GET'])
