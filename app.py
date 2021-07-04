@@ -447,6 +447,18 @@ def get_vehicles():
                 'versionsvehicles_vehicleid': version.versionsvehicles_vehicleid
             }) 
         
+        colors = Colorsvehicles.query.filter(Colorsvehicles.colorsvehicles_vehicleid == vehicle.vehicles_id).all()
+        colorsVehicles = []
+        for color in colors:
+            colorsVehicles.append({
+                'colors_id': color.colorsvehicles_id,
+                'colors_name': color.colorsvehicles_name,
+                'colors_color': base64.b64encode(color.colorsvehicles_color).decode("utf-8"),
+                'colors_image': base64.b64encode(color.colorsvehicles_imgcolor).decode("utf-8"),
+                'colors_price': color.colorsvehicles_price,
+            })
+
+
         result.append({
             "vehicles_id": vehicle.vehicles_id,
             "vehicles_name": vehicle.vehicles_name,
@@ -457,8 +469,8 @@ def get_vehicles():
             "vehicles_description": vehicle.vehicles_description,
             "vehicles_warranty": vehicle.vehicles_warranty,
             "vehicles_images": imagesVehicles,
-            "vehicles_version": versionsVehicles
-            #         "vehicles_colors": colorsVehicles,
+            "vehicles_version": versionsVehicles,
+            "vehicles_colors": colorsVehicles
             #         "vehicles_interiors": interiorsVehicles,
             #         "vehicles_rims": rimsVehicles
         })
@@ -466,17 +478,7 @@ def get_vehicles():
     
     #     
 
-        # colors = Colorsvehicles.query.filter(Colorsvehicles.colorsvehicles_vehicleid == vehicle.vehicles_id).all()
-        # colorsVehicles = []
-        # for color in colors:
-        #     colorsVehicles.append({
-        #         'colors_id': color.colorsvehicles_id,
-        #         'colors_name': color.colorsvehicles_name,
-        #         'colors_color': base64.b64encode(color.colorsvehicles_color).decode("utf-8"),
-        #         'colors_image': base64.b64encode(color.colorsvehicles_imgcolor).decode("utf-8"),
-        #         'colors_price': color.colorsvehicles_price,
-        #     })
-
+        
         # interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == vehicle.vehicles_id).all()
         # interiorsVehicles = []
         # for interior in interiors:
