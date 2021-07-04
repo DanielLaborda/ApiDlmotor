@@ -49,6 +49,18 @@ class Users(db.Model):
         self.users_email = users_email
         self.users_type = users_type
 
+# MODEL categories
+class Categories(db.Model):
+    categories_id = db.Column(db.Integer, primary_key=True)
+    categories_name = db.Column(db.String(50))
+    categories_image = db.Column(db.BLOB)
+    categories_description = db.Column(db.Text)
+
+    def __init__(self, categories_name, categories_image, categories_description):
+        self.categories_name = categories_name
+        self.categories_image = categories_image
+        self.categories_description = categories_description
+
 # MODEL GARAGE
 class Garage(db.Model):
     garage_id = db.Column(db.Integer, primary_key=True)
@@ -267,6 +279,27 @@ def create_user():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return  response
 
+#categories
+@app.route('/categories/', methods=['GET'])
+def get_categories():
+    categories = Categories.query.all()
+    result = []
+    for category in categories:
+        result.append({
+            "categories_id": category.categories_id,
+            "categories_name": category.categories_name,
+            "categories_image": base64.b64encode(category.categories_image).decode("utf-8"),
+            "categories_description": category.categories_description  
+        })
+    
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
+
+
 #garage
 @app.route('/garage/', methods=['GET'])
 def get_garage():
@@ -327,3 +360,6 @@ def get_categoriesracing():
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
+
+    
