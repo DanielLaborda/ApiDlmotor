@@ -311,7 +311,7 @@ def get_racingTeam():
     return response   
 
 #categoriesRacing
-@app.route('/categoriesRacing', methods=['GET'])
+@app.route('/categoriesRacing/', methods=['GET'])
 def get_categoriesracing():
     categoriesracing = Categoriesracing.query.all()
   
