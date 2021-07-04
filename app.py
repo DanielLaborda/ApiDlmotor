@@ -458,6 +458,17 @@ def get_vehicles():
                 'colors_price': color.colorsvehicles_price,
             })
 
+        interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == vehicle.vehicles_id).all()
+        interiorsVehicles = []
+        for interior in interiors:
+            interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
+            interiorsVehicles.append({
+                'interior_id': interior.interiorsvehicles_id,
+                'interior_name': interior.interiorsvehicles_name,
+                'interior_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
+                'interior_basePrice': interior.interiorsvehicles_baseprice,
+                'interior_components': interiors_components
+            })
 
         result.append({
             "vehicles_id": vehicle.vehicles_id,
@@ -470,8 +481,8 @@ def get_vehicles():
             "vehicles_warranty": vehicle.vehicles_warranty,
             "vehicles_images": imagesVehicles,
             "vehicles_version": versionsVehicles,
-            "vehicles_colors": colorsVehicles
-            #         "vehicles_interiors": interiorsVehicles,
+            "vehicles_colors": colorsVehicles,
+            "vehicles_interiors": interiorsVehicles
             #         "vehicles_rims": rimsVehicles
         })
     
@@ -479,17 +490,7 @@ def get_vehicles():
     #     
 
         
-        # interiors = Interiorsvehicles.query.filter(Interiorsvehicles.interiorsvehicles_vehicleid == vehicle.vehicles_id).all()
-        # interiorsVehicles = []
-        # for interior in interiors:
-        #     interiors_components = get_componentInteriors_byvehicle(interior.interiorsvehicles_id)
-        #     interiorsVehicles.append({
-        #         'interior_id': interior.interiorsvehicles_id,
-        #         'interior_name': interior.interiorsvehicles_name,
-        #         'interior_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
-        #         'interior_basePrice': interior.interiorsvehicles_baseprice,
-        #         'interior_components': interiors_components
-        #     })
+        
 
 
     #     rims = Rimsvehicles.query.filter(Rimsvehicles.rimsvehicles_vehicleid == vehicle.vehicles_id).all()
