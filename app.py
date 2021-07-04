@@ -433,6 +433,20 @@ def get_vehicles():
                 "vehicleimage_id": image.imagesvehicles_id,
                 "vehicleimage_image": base64.b64encode(image.imagesvehicles_image).decode("utf-8")
             })
+        
+        versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == vehicle.vehicles_id).all()
+        versionsVehicles = []
+        for version in versions:
+            version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
+            versionsVehicles.append({
+                'versionsVehicles_id': version.versionsvehicles_id,
+                'versionsvehicles_name': version.versionsvehicles_name,
+                'versionsvehicles_image': base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
+                'versionsvehicles_baseprice': version.versionsvehicles_baseprice,
+                'versionsvehicles_components': version_list,
+                'versionsvehicles_vehicleid': version.versionsvehicles_vehicleid
+            }) 
+        
         result.append({
             "vehicles_id": vehicle.vehicles_id,
             "vehicles_name": vehicle.vehicles_name,
@@ -442,25 +456,13 @@ def get_vehicles():
             "vehicles_slogan": vehicle.vehicles_slogan,
             "vehicles_description": vehicle.vehicles_description,
             "vehicles_warranty": vehicle.vehicles_warranty,
-            "vehicles_images": imagesVehicles
-            #         "vehicles_version": versionsVehicles,
+            "vehicles_images": imagesVehicles,
+            "vehicles_version": versionsVehicles
             #         "vehicles_colors": colorsVehicles,
             #         "vehicles_interiors": interiorsVehicles,
             #         "vehicles_rims": rimsVehicles
         })
-        # versions = Versionsvehicles.query.filter(Versionsvehicles.versionsvehicles_vehicleid == vehicle.vehicles_id).all()
-        # versionsVehicles = []
-        # for version in versions:
-        #     version_list = get_complementsversion_byversionId(version.versionsvehicles_id)
-        #     versionsVehicles.append({
-        #         'versionsVehicles_id': version.versionsvehicles_id,
-        #         'versionsvehicles_name': version.versionsvehicles_name,
-        #         'versionsvehicles_image': base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
-        #         'versionsvehicles_baseprice': version.versionsvehicles_baseprice,
-        #         'versionsvehicles_components': version_list,
-        #         'versionsvehicles_vehicleid': version.versionsvehicles_vehicleid
-        #     }) 
-        
+    
     
     #     
 
