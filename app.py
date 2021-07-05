@@ -423,9 +423,7 @@ def get_vehicles():
     result = []
     
     for vehicle in vehicles:
-        images = Imagesvehicles.query.filter(Imagesvehicles.imagesvehicles_vehicleid == vehicle.vehicles_id).all()
-        print(vehicle.vehicles_id)
-        
+        images = Imagesvehicles.query.filter(Imagesvehicles.imagesvehicles_vehicleid == vehicle.vehicles_id).all()        
         
         imagesVehicles = []
         for image in images:
@@ -472,14 +470,16 @@ def get_vehicles():
 
         rims = Rimsvehicles.query.filter(Rimsvehicles.rimsvehicles_vehicleid == vehicle.vehicles_id).all()
         rimsVehicles = []
+        
         for rim in rims:
+            print(rim.rimsvehicles_material)
             rimsVehicles.append({
                 'rims_id': rim.rimsvehicles_id,
                 'rims_model': rim.rimsvehicles_model,
                 'rims_size': rim.rimsvehicles_size,
                 'rims_material': rim.rimsvehicles_material,
-                'rims_image': base64.b64encode(rim.rimsvehicles_image).decode("utf-8"),
-                'rims_baseprice': rim.rimsvehicles_baseprice
+            #     'rims_image': base64.b64encode(rim.rimsvehicles_image).decode("utf-8"),
+            #     'rims_baseprice': rim.rimsvehicles_baseprice
             })
 
         result.append({
@@ -508,8 +508,6 @@ def get_vehicles():
 def get_complementsversion_byversionId(_id):
     complementsversions = Complementsversions.query.filter(Complementsversions.complementsversions_versionsid == _id).all()
     result = []
-    print("---complementos--")
-    print(complementsversions)
     for component in complementsversions:
         result.append(component.complementsversions_name)
     db.session.commit()
@@ -520,8 +518,6 @@ def get_componentInteriors_byvehicle(_id):
     result = []
     for component in comonentsInterior:
         result.append(component.complementsinteriors_name)
-    print("---complementos interioe--")
-    print(comonentsInterior)
     db.session.commit()
     return result
 
@@ -585,3 +581,7 @@ def get_categoriesracing():
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    
