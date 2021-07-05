@@ -495,7 +495,7 @@ def get_vehicles():
             "vehicles_version": versionsVehicles,
             "vehicles_colors": colorsVehicles,
             "vehicles_interiors": interiorsVehicles,
-            "vehicles_rims": "rimsVehicles"
+            "vehicles_rims": rimsVehicles
         })
     
     
