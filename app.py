@@ -440,8 +440,9 @@ def get_vehicles():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
-@app.route('/vehiclesbyid/<_id>', methods=['GET'])
-def get_vehicles_by_id(_id):
+@app.route('/vehiclesbyid/', methods=['GET'])
+def get_vehicles_by_id():
+    _id = request.args['id']
     vehicle = Vehicles.query.get(_id)
     images = Imagesvehicles.query.filter(Imagesvehicles.imagesvehicles_vehicleid == _id).all()
     imagesVehicles = []
