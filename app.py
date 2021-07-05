@@ -473,15 +473,14 @@ def get_vehicles():
         rimsVehicles = []
         
         for rim in rims:
-            print(rim.rimsvehicles_vehicleid)
-            # rimsVehicles.append({
-            #     'rims_id': rim.rimsvehicles_id,
-            #     'rims_model': rim.rimsvehicles_model,
-            #     'rims_size': rim.rimsvehicles_size,
-            #     'rims_material': rim.rimsvehicles_material
-            # #     'rims_image': base64.b64encode(rim.rimsvehicles_image).decode("utf-8"),
-            # #     'rims_baseprice': rim.rimsvehicles_baseprice
-            # })
+            rimsVehicles.append({
+                'rims_id': rim.rimsvehicles_id,
+                'rims_model': rim.rimsvehicles_model,
+                'rims_size': rim.rimsvehicles_size,
+                'rims_material': rim.rimsvehicles_material,
+                'rims_image': base64.b64encode(rim.rimsvehicles_image).decode("utf-8"),
+                'rims_baseprice': rim.rimsvehicles_baseprice
+            })
 
         result.append({
             "vehicles_id": vehicle.vehicles_id,
@@ -583,6 +582,6 @@ def get_categoriesracing():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
     
