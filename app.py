@@ -468,11 +468,12 @@ def get_vehicles():
                 'interior_components': interiors_components
             })
 
+        print(vehicle.vehicles_id)
         rims = Rimsvehicles.query.filter(Rimsvehicles.rimsvehicles_vehicleid == vehicle.vehicles_id).all()
         rimsVehicles = []
         
         for rim in rims:
-            print(rim.rimsvehicles_material)
+            print(rim.rimsvehicles_vehicleid)
             # rimsVehicles.append({
             #     'rims_id': rim.rimsvehicles_id,
             #     'rims_model': rim.rimsvehicles_model,
@@ -495,7 +496,7 @@ def get_vehicles():
             "vehicles_version": versionsVehicles,
             "vehicles_colors": colorsVehicles,
             "vehicles_interiors": interiorsVehicles,
-            "vehicles_rims": rimsVehicles
+            "vehicles_rims": "rimsVehicles"
         })
     
     
