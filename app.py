@@ -420,19 +420,20 @@ def get_categories():
 @app.route('/vehicles/', methods=['GET'])
 def get_vehicles():
     vehicles = Vehicles.query.all()
-    result = []
+    result = vehicles
     
-    for vehicle in vehicles:
-        result.append({
-            "vehicles_id": vehicle.vehicles_id,
-            "vehicles_name": vehicle.vehicles_name,
-            "vehicles_banner": base64.b64encode(vehicle.vehicles_banner).decode("utf-8"),
-            "vehicles_image_category": base64.b64encode(vehicle.vehicles_image_category).decode("utf-8"),
-            "vehicles_category": vehicle.vehicles_category,
-            "vehicles_slogan": vehicle.vehicles_slogan,
-            "vehicles_description": vehicle.vehicles_description,
-            "vehicles_warranty": vehicle.vehicles_warranty
-        })
+    # for vehicle in vehicles:
+    #     result.append({
+    #         "vehicles_id": vehicle.vehicles_id,
+    #         "vehicles_name": vehicle.vehicles_name,
+    #         "vehicles_banner": base64.b64encode(vehicle.vehicles_banner).decode("utf-8"),
+    #         "vehicles_image_category": base64.b64encode(vehicle.vehicles_image_category).decode("utf-8"),
+    #         "vehicles_category": vehicle.vehicles_category,
+    #         "vehicles_slogan": vehicle.vehicles_slogan,
+    #         "vehicles_description": vehicle.vehicles_description,
+    #         "vehicles_warranty": vehicle.vehicles_warranty
+    #     })
+
 
     db.session.commit()
     response = jsonify(result)
