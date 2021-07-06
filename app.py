@@ -400,13 +400,7 @@ def create_user():
     users_email = request.json['users_email']
     users_type = request.json['users_type']
 
-    result ={
-        "users_name": users_name, 
-        "users_surname": users_surname,
-        "users_password": users_password,
-        "users_email": users_email,
-        "users_type": users_type,
-    }
+    result = {}
     exist = Users.query.filter(Users.users_email == users_email).all()
     if (exist):
         result = {
