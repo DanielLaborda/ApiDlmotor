@@ -392,6 +392,7 @@ def get_userinfo():
 # USER- create
 @app.route('/createUsers/', methods=['POST'])
 def create_user():
+    request.headers["Access-Control-Allow-Origin"] = "*"
     users_name = request.json['users_name']
     users_surname = request.json['users_surname']
     users_password = request.json['users_password']
