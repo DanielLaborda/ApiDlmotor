@@ -295,7 +295,7 @@ def home():
     return f'Its working'
 
 #company
-@app.route('/company/', methods=['GET'])
+@app.route('/api/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
   
@@ -393,7 +393,6 @@ def get_userinfo():
 
 # USER- create
 @app.route('/createUsers/', methods=['POST'])
-@cross_origin()
 def create_user():
     users_name = request.json['users_name']
     users_surname = request.json['users_surname']
