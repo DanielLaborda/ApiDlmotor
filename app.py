@@ -238,6 +238,46 @@ class Categoriesracing(db.Model):
         self.categoriesracing_image = categoriesracing_image
         self.categoriesracing_video = categoriesracing_video
 
+# MODEL quote
+class Quotes(db.Model):
+    quotes_id = db.Column(db.Integer, primary_key=True)
+    quotes_date = db.Column(db.DATETIME)
+    quotes_customer = db.Column(db.String(100))
+    quotes_email = db.Column(db.String(50))
+    quotes_vehicleid = db.Column(db.Integer)
+    quotes_modelvehicle = db.Column(db.String(50))
+    quotes_version = db.Column(db.Integer)
+    quotes_versionprice = db.Column(db.FLOAT)
+    quotes_color = db.Column(db.Integer)
+    quotes_colorprice = db.Column(db.FLOAT)
+    quotes_interior = db.Column(db.Integer)
+    quotes_interiorprice = db.Column(db.FLOAT)
+    quotes_rims = db.Column(db.Integer)
+    quotes_rimsprice = db.Column(db.FLOAT)
+    quotes_discount = db.Column(db.String(100))
+    quotes_discountprice = db.Column(db.FLOAT)
+    quotes_total = db.Column(db.FLOAT)
+    quotes_status = db.Column(db.Integer)
+
+    def __init__(self, quotes_date, quotes_customer, quotes_email, quotes_vehicleid, quotes_modelvehicle, quotes_version, quotes_versionprice, quotes_color, quotes_colorprice, quotes_interior, quotes_interiorprice, quotes_rims, quotes_rimsprice, quotes_discount, quotes_discountprice, quotes_total, quotes_status):
+        self.quotes_date = quotes_date
+        self.quotes_customer = quotes_customer
+        self.quotes_email = quotes_email
+        self.quotes_vehicleid = quotes_vehicleid
+        self.quotes_modelvehicle = quotes_modelvehicle
+        self.quotes_version = quotes_version
+        self.quotes_versionprice = quotes_versionprice
+        self.quotes_color = quotes_color
+        self.quotes_colorprice = quotes_colorprice
+        self.quotes_interior = quotes_interior
+        self.quotes_interiorprice = quotes_interiorprice
+        self.quotes_rims = quotes_rims
+        self.quotes_rimsprice = quotes_rimsprice
+        self.quotes_discount = quotes_discount
+        self.quotes_discountprice = quotes_discountprice
+        self.quotes_total = quotes_total
+        self.quotes_status = quotes_status
+
 #SCHEMA
 class UserTypesSchema(ma.Schema):
     class Meta:
@@ -601,6 +641,37 @@ def get_categoriesracing():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+# QUOTES- create quote
+@app.route('/quotes/', methods=['POST'])
+def create_quote():
+    quotes_date = dt.now()
+    quotes_customer = request.json['quotes_customer']
+    quotes_email = request.json['quotes_email']
+    quotes_vehicleid = request.json['quotes_vehicleid']
+    quotes_modelvehicle = request.json['quotes_modelvehicle']
+    quotes_version = request.json['quotes_version']
+    quotes_versionprice = request.json['quotes_versionprice']
+    quotes_color = request.json['quotes_color']
+    quotes_colorprice = request.json['quotes_colorprice']
+    quotes_interior = request.json['quotes_interior']
+    quotes_interiorprice = request.json['quotes_interiorprice']
+    quotes_rims = request.json['quotes_rims']
+    quotes_rimsprice = request.json['quotes_rimsprice']
+    quotes_discount = request.json['quotes_discount']
+    quotes_discountprice = request.json['quotes_discountprice']
+    quotes_total = request.json['quotes_total']
+    quotes_status = request.json['quotes_status']
+
+    new_quote = Quotes( quotes_date, quotes_customer, quotes_email, quotes_vehicleid, quotes_modelvehicle, quotes_version, quotes_versionprice, quotes_color, quotes_colorprice, quotes_interior, quotes_interiorprice, quotes_rims, quotes_rimsprice, quotes_discount, quotes_discountprice, quotes_total, quotes_status )
+    db.session.add(new_quote)
+    db.session.commit()
+
+    result = {"response":"created"}
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return  response
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
     
