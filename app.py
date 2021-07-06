@@ -2,6 +2,7 @@ import flask
 from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_cors import CORS
 from datetime import datetime as dt
 import base64
 
@@ -10,6 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://dlmotorroot:dlmotorroot
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Dani060990@localhost:3307/dlmotor'
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+CORS(app)
 
 # MODEL COMPANY
 class Company(db.Model):
@@ -391,6 +393,7 @@ def get_userinfo():
 
 # USER- create
 @app.route('/createUsers/', methods=['POST'])
+@cross_origin()
 def create_user():
     users_name = request.json['users_name']
     users_surname = request.json['users_surname']
