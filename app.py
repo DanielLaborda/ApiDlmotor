@@ -432,7 +432,7 @@ def create_user():
 
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
-    return  "response"
+    return  response
 
 #categories
 @app.route('/categories/', methods=['GET'])
