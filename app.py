@@ -393,6 +393,7 @@ def get_userinfo():
 
 # USER- create
 @app.route('/createUsers/', methods=['POST'])
+@cross_origin()
 def create_user():
     users_name = request.json['users_name']
     users_surname = request.json['users_surname']
