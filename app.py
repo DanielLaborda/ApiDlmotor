@@ -295,7 +295,7 @@ def home():
     return f'Its working'
 
 #company
-@app.route('/api/company/', methods=['GET'])
+@app.route('/company/', methods=['GET'])
 def get_company():
     _id = request.args['id']
   
