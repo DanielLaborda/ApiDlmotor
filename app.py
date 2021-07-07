@@ -739,9 +739,10 @@ def get_quote_id():
 
 # QUOTES- quoteByEmail
 @app.route('/quotesByEmail/', methods=['GET'])
-def get_quotesByEmail(email):
+def get_quotesByEmail():
     email = request.args['email']  
 
+    print(email)
     quotes = Quotes.query.filter(Quotes.quotes_email == email).all()
 
     result = []
@@ -779,6 +780,6 @@ def get_quotesByEmail(email):
 
     return response
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
     
