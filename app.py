@@ -280,6 +280,15 @@ class Quotes(db.Model):
         self.quotes_total = quotes_total
         self.quotes_status = quotes_status
 
+# MODEL quote
+class Quotesstatus(db.Model):
+    quotesstatus_id = db.Column(db.Integer, primary_key=True)
+    quotesstatus_name = db.Column(db.String(25))
+
+    def __init__(self, quotesstatus_id, quotesstatus_name):
+        self.quotesstatus_id = quotesstatus_id
+        self.quotesstatus_name = quotesstatus_name
+
 #SCHEMA
 class UserTypesSchema(ma.Schema):
     class Meta:
@@ -287,8 +296,13 @@ class UserTypesSchema(ma.Schema):
 userType_schema = UserTypesSchema()
 userTypes_schema = UserTypesSchema(many=True)
 
-#ROUTES
+class QuotesstatusSchema(ma.Schema):
+    class Meta:
+        fields = ('quotesstatus_id', 'quotesstatus_name')
+quoteStatus_schema = QuotesstatusSchema()
+quotesStatus_schema = QuotesstatusSchema(many=True)
 
+#ROUTES
 #home
 @app.route('/', methods=['GET'])
 def home():
@@ -839,6 +853,35 @@ def get_interiors():
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
+#rims
+@app.route('/rims', methods=['GET'])
+def get_rims():
+    rims = Rimsvehicles.query.all()
+    result = []
+    for rim in rims:
+        result.append({
+            'rimsvehicles_id': rim.rimsvehicles_id,
+            'rimsvehicles_model': rim.rimsvehicles_model,
+            'rimsvehicles_size': rim.rimsvehicles_size,
+            'rimsvehicles_material': rim.rimsvehicles_material,
+            'rimsvehicles_image': base64.b64encode(rim.rimsvehicles_image).decode("utf-8"),
+            'rimsvehicles_baseprice': rim.rimsvehicles_baseprice,
+            'rimsvehicles_vehicleid': rim.rimsvehicles_vehicleid
+        })
+
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+#quotesStatus
+@app.route('/quotesStatus', methods=['GET'])
+def get_quotes_status():
+    all_quotestatus = Quotesstatus.query.all()
+    result = quotesStatus_schema.dump(all_quotestatus)
+    return jsonify(result)
+
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
