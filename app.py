@@ -2,6 +2,7 @@ import flask
 from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from werkzeug.wrappers import response
 from flask_cors import CORS
 from datetime import datetime as dt
 import base64
@@ -864,6 +865,25 @@ def update_user():
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
+# QUOTES- DeleteQuote
+@app.route('/deleteQuote/', methods=['DELETE'])
+def delete_quote():
+    _id = request.args['id']  
+    quote = Quotes.query.get(_id)
+    
+    db.session.delete(quote)
+    db.session.commit()
+
+    result = {
+        "response": "deleted"
+    }
+    
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response   
+
+
 
 #versions
 @app.route('/versions/', methods=['GET'])
