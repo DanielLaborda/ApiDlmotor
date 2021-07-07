@@ -780,6 +780,7 @@ def get_quotesByEmail():
 
     return response
 
+#versions
 @app.route('/versions/', methods=['GET'])
 def get_versions():
     versions = Versionsvehicles.query.all()
@@ -796,6 +797,26 @@ def get_versions():
 
     db.session.commit()
     
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+#colors
+@app.route('/colors/', methods=['GET'])
+def get_colors():
+    colors = Colorsvehicles.query.all()
+    result = []
+    for color in colors:
+        result.append({
+            'colorsvehicles_id': color.colorsvehicles_id,
+            'colorsvehicles_name': color.colorsvehicles_name,
+            'colorsvehicles_color': base64.b64encode(color.colorsvehicles_color).decode("utf-8"),
+            'colorsvehicles_imgcolor': base64.b64encode(color.colorsvehicles_imgcolor).decode("utf-8"),
+            'colorsvehicles_price': color.colorsvehicles_price,
+            'colorsvehicles_vehicleid': color.colorsvehicles_vehicleid
+        })
+
+    db.session.commit()
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
