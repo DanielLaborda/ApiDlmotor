@@ -821,6 +821,24 @@ def get_colors():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
+#interiors
+@app.route('/interiors/', methods=['GET'])
+def get_interiors():
+    interiors = Interiorsvehicles.query.all()
+    result = []
+    for interior in interiors:
+        result.append({
+            'interiorsvehicles_id': interior.interiorsvehicles_id,
+            'interiorsvehicles_name': interior.interiorsvehicles_name,
+            'interiorsvehicles_image': base64.b64encode(interior.interiorsvehicles_image).decode("utf-8"),
+            'interiorsvehicles_baseprice': interior.interiorsvehicles_baseprice,
+            'interiorsvehicles_vehicleid': interior.interiorsvehicles_vehicleid
+        })
+
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
