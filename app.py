@@ -794,6 +794,77 @@ def get_quotesByEmail():
 
     return response
 
+# QUOTES- UpdateQuote
+@app.route('/updateQuote/', methods=['PUT'])
+def update_user():
+    _id = request.args['id']  
+    quote = Quotes.query.get(_id)
+    quotes_customer = request.json['quotes_customer']
+    quotes_email = request.json['quotes_email']
+    quotes_vehicleid = request.json['quotes_vehicleid']
+    quotes_modelvehicle = request.json['quotes_modelvehicle']
+    quotes_version = request.json['quotes_version']
+    quotes_versionprice = request.json['quotes_versionprice']
+    quotes_color = request.json['quotes_color']
+    quotes_colorprice = request.json['quotes_colorprice']
+    quotes_interior = request.json['quotes_interior']
+    quotes_interiorprice = request.json['quotes_interiorprice']
+    quotes_rims = request.json['quotes_rims']
+    quotes_rimsprice = request.json['quotes_rimsprice']
+    quotes_discount = request.json['quotes_discount']
+    quotes_discountprice = request.json['quotes_discountprice']
+    quotes_total = request.json['quotes_total']
+    quotes_status = request.json['quotes_status']
+    quote.quotes_customer = quotes_customer
+    quote.quotes_email = quotes_email
+    quote.quotes_vehicleid = quotes_vehicleid
+    quote.quotes_modelvehicle = quotes_modelvehicle
+    quote.quotes_version = quotes_version
+    quote.quotes_versionprice = quotes_versionprice
+    quote.quotes_color = quotes_color
+    quote.quotes_colorprice = quotes_colorprice
+    quote.quotes_interior = quotes_interior
+    quote.quotes_interiorprice = quotes_interiorprice
+    quote.quotes_rims = quotes_rims
+    quote.quotes_rimsprice = quotes_rimsprice
+    quote.quotes_discount = quotes_discount
+    quote.quotes_discountprice = quotes_discountprice
+    quote.quotes_total = quotes_total
+    quote.quotes_status = quotes_status
+
+    result = []
+    version = Versionsvehicles.query.get(quote.quotes_version)
+    color = Colorsvehicles.query.get(quote.quotes_color)
+    interior = Interiorsvehicles.query.get(quote.quotes_interior)
+    rims = Rimsvehicles.query.get(quote.quotes_rims)
+    status = Quotesstatus.query.get(quote.quotes_status)
+        
+    result.append({
+        "quotes_id": quote.quotes_id,
+        "quotes_date": quote.quotes_date,
+        "quotes_customer": quote.quotes_customer,
+        "quotes_email": quote.quotes_email,
+        "quotes_vehicleid": quote.quotes_vehicleid,
+        "quotes_modelvehicle": quote.quotes_modelvehicle,
+        "quotes_version": version.versionsvehicles_name,
+        "quotes_versionprice": quote.quotes_versionprice,
+        "quotes_color": color.colorsvehicles_name,
+        "quotes_colorprice": quote.quotes_colorprice,
+        "quotes_interior": interior.interiorsvehicles_name,
+        "quotes_interiorprice": quote.quotes_interiorprice,
+        "quotes_rims": rims.rimsvehicles_model,
+        "quotes_rimsprice": quote.quotes_rimsprice,
+        "quotes_discount": quote.quotes_discount,
+        "quotes_discountprice": quote.quotes_discountprice,
+        "quotes_total": quote.quotes_total,
+        "quotes_status": status.quotesstatus_name  
+    })
+
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
 #versions
 @app.route('/versions/', methods=['GET'])
 def get_versions():
