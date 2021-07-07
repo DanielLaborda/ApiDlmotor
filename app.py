@@ -855,7 +855,7 @@ def get_interiors():
     return response
 
 #rims
-@app.route('/rims', methods=['GET'])
+@app.route('/rims/', methods=['GET'])
 def get_rims():
     rims = Rimsvehicles.query.all()
     result = []
@@ -876,11 +876,14 @@ def get_rims():
     return response
 
 #quotesStatus
-@app.route('/quotesStatus', methods=['GET'])
+@app.route('/quotesStatus/', methods=['GET'])
 def get_quotes_status():
     all_quotestatus = Quotesstatus.query.all()
     result = quotesStatus_schema.dump(all_quotestatus)
-    return jsonify(result)
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 # if __name__ == '__main__':
