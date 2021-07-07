@@ -741,6 +741,7 @@ def get_quote_id():
 @app.route('/quotesByEmail/', methods=['GET'])
 def get_quotesByEmail(email):
     email = request.args['email']  
+
     quotes = Quotes.query.filter(Quotes.quotes_email == email).all()
 
     result = []
@@ -776,7 +777,7 @@ def get_quotesByEmail(email):
     response = jsonify(result)
     response.headers["Access-Control-Allow-Origin"] = "*"
 
-#     return response
+    return response
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
