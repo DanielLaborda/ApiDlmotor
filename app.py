@@ -780,6 +780,27 @@ def get_quotesByEmail():
 
     return response
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/versions/', methods=['GET'])
+def get_versions():
+    versions = Versionsvehicles.query.all()
+    result = []
+
+    for version in versions:
+        result.append({
+            "versionsvehicles_id": version.versionsvehicles_id,
+            "versionsvehicles_name": version.versionsvehicles_name,
+            "versionsvehicles_image": base64.b64encode(version.versionsvehicles_image).decode("utf-8"),
+            "versionsvehicles_baseprice": version.versionsvehicles_baseprice,
+            "versionsvehicles_vehicleid": version.versionsvehicles_vehicleid  
+        })
+
+    db.session.commit()
+    
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
     
