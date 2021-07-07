@@ -667,6 +667,7 @@ def create_quote():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return  response
 
+# QUOTES- All quote
 @app.route('/quotes/', methods=['GET'])
 def get_quotes():
     quotes = Quotes.query.all()
@@ -694,6 +695,41 @@ def get_quotes():
             "quotes_total": quote.quotes_total,
             "quotes_status": quote.quotes_status  
         })
+
+    db.session.commit()
+    response = jsonify(result)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+
+    return response
+
+# QUOTES- quotebyid
+@app.route('/quotesById/', methods=['GET'])
+def get_quote_id():
+    _id = request.args['id']  
+    quote = Quotes.query.get(_id)
+   
+    result = []
+        
+    result.append({
+        "quotes_id": quote.quotes_id,
+        "quotes_date": quote.quotes_date,
+        "quotes_customer": quote.quotes_customer,
+        "quotes_email": quote.quotes_email,
+        "quotes_vehicleid": quote.quotes_vehicleid,
+        "quotes_modelvehicle": quote.quotes_modelvehicle,
+        "quotes_version": quote.quotes_version,
+        "quotes_versionprice": quote.quotes_versionprice,
+        "quotes_color": quote.quotes_color,
+        "quotes_colorprice": quote.quotes_colorprice,
+        "quotes_interior": quote.quotes_interior,
+        "quotes_interiorprice": quote.quotes_interiorprice,
+        "quotes_rims": quote.quotes_rims,
+        "quotes_rimsprice": quote.quotes_rimsprice,
+        "quotes_discount": quote.quotes_discount,
+        "quotes_discountprice": quote.quotes_discountprice,
+        "quotes_total": quote.quotes_total,
+        "quotes_status": quote.quotes_status 
+    })
 
     db.session.commit()
     response = jsonify(result)
